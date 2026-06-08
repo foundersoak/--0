@@ -32,7 +32,13 @@ export function CandidateList({
 
   return (
     <div>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      <div className="mb-2 flex items-baseline justify-between">
+        <span className="text-xs font-semibold uppercase tracking-wide text-white/40">
+          {state.spin.candidates.length} players · pick one
+        </span>
+        <span className="text-[11px] text-white/30">best first</span>
+      </div>
+      <div className="grid max-h-[58vh] grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
         {state.spin.candidates.map((player) => (
           <PlayerCard
             key={player.id}

@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Undefeated
 
-## Getting Started
+A viral-style, multi-sport **roster-building game**. Spin a random franchise and era,
+draft real legends into your lineup, and find out if your all-time team can go **undefeated**.
+Inspired by [82-0.com](https://82-0.com) — one hub, every major league.
 
-First, run the development server:
+- **NBA — 82‑0** — live and deep (8,000+ players, real per-team/decade rosters).
+- **NFL 17‑0 · MLB 162‑0 · NHL 82‑0 · CFB 12‑0 · EPL 38‑0** — coming soon (same engine, per-sport data).
+
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev          # http://localhost:3000  → click NBA, or go to /nba
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm build        # production build (static per-sport pages)
+pnpm test         # engine unit tests (Vitest)
+pnpm tsx scripts/etl/nba.ts   # rebuild the NBA dataset from open sources
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploying (for real playtesting + ads later)
 
-## Learn More
+It's a standard Next.js app with **no required env vars**, so it deploys to **Vercel** in a couple of clicks:
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [vercel.com/new](https://vercel.com/new) and import this GitHub repo (`foundersoak/--0`).
+2. Accept the defaults (Vercel detects Next.js) and **Deploy**.
+3. You get a live URL. Pushes to the branch auto-deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How the game works
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Each round a slot machine assigns a random **franchise + decade**; you pick one real player and
+slot him at a position he actually played. You get one team reroll and one era reroll. When the
+lineup is full, its stats run through a season simulation:
 
-## Deploy on Vercel
+- **Era adjustment** — pace-inflated old-era numbers are deflated, so a 1960s 30 PPG ≈ a 2000s 25.
+- **Per-category gating** — every category (scoring, rebounding, playmaking, steals, rim protection)
+  has a floor. One glaring weakness **caps your record** no matter how huge the rest is. This is the
+  addictive part.
+- **Non-linear win curve** — a stacked, balanced all-time lineup goes 82‑0; good lineups land
+  mid-pack; one-dimensional rosters get gated.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Architecture
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+One **framework-agnostic engine** (`src/engine`) is parameterized by a per-sport **`SportConfig`**
+(`src/sports/<id>/config.ts`) plus a bundled, code-split **dataset** (`src/sports/<id>/data.json`).
+Adding a league = add a config + run its ETL; the engine and UI are shared.
+
+```
+src/engine        types · seedable RNG · state machine · season simulation (+ tests)
+src/sports/<id>   config.ts (positions, eras, franchises, scoring) + data.json
+src/components     slot machine, roster board, candidate picker, result card, ad slots
+src/app           hub (/) + per-sport routes (/[sport], /[sport]/how-to-play)
+scripts/etl       build-time data pipelines (open data → committed JSON)
+```
+
+## Data
+
+Player data is built at **build time** from permissively-available open datasets and committed to
+the repo, so the live game never depends on the network. See [ATTRIBUTION.md](./ATTRIBUTION.md).
+This is an unofficial fan project, not affiliated with any league; no logos or player likenesses
+are used.
