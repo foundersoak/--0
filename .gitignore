@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# etl raw-data cache (large; regenerated from source URLs)
+/scripts/etl/.cache
