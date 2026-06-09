@@ -41,8 +41,19 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
         <footer className="border-t border-white/10">
           <div className="mx-auto max-w-6xl px-4 py-6 text-xs leading-relaxed text-white/35">
-            {BRAND.name} is an unofficial fan game and is not affiliated with any league. Player
-            stats are curated for entertainment. Built on open data sources — see ATTRIBUTION.
+            <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 font-semibold">
+              <Link href="/attribution" className="transition hover:text-white/70">
+                Attribution &amp; legal
+              </Link>
+              <Link href="/privacy" className="transition hover:text-white/70">
+                Privacy
+              </Link>
+              <Link href="/contact" className="transition hover:text-white/70">
+                Contact
+              </Link>
+            </div>
+            {BRAND.name} is an unofficial fan game, not affiliated with any league. Player names and
+            statistics are used for identification; no team logos or player photos.
           </div>
         </footer>
       </body>
