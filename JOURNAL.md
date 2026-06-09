@@ -7,6 +7,13 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Legal/compliance pages (attribution, privacy, contact)
+- `/attribution` — a real page for the footer's previously-dead "Attribution" link, listing the NBA
+  open-data sources + the unofficial/no-logos disclaimer.
+- `/privacy` — Privacy Policy with the AdSense cookie/advertising disclosures + opt-out links, and
+  `/contact` — both required for AdSense approval. Contact address in `lib/brand.ts` (`contactEmail`).
+- Footer now links Attribution / Privacy / Contact. Refreshed `ATTRIBUTION.md` (brand + real sources).
+
 ### Leaderboard upgrades + hub cards
 - **Hub cards** now show **Play now** + **Leaderboard** buttons for each live sport.
 - **Time periods**: skill-mode submissions write to **all-time + monthly + weekly** boards
