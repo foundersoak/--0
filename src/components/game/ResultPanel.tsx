@@ -1,8 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
-import type { CategoryResult, GameState } from "@/engine";
-import type { SportConfig } from "@/engine/types";
+import { eraAdjustStats, type CategoryResult, type GameState } from "@/engine";
+import type { PlayerEntry, SportConfig } from "@/engine/types";
 import type { GameModeDef } from "@/lib/modes";
 import { dailyDateFromSeed, encodeShare, shareGrid } from "@/lib/share";
 import { recordResult, type RecordOutcome } from "@/lib/store";
@@ -14,11 +14,13 @@ export function ResultPanel({
   state,
   onPlayAgain,
   mode,
+  offered,
 }: {
   config: SportConfig;
   state: GameState;
   onPlayAgain: () => void;
   mode?: GameModeDef;
+  offered?: PlayerEntry[];
 }) {
   const [copied, setCopied] = useState(false);
   const [outcome, setOutcome] = useState<RecordOutcome | null>(null);
@@ -47,6 +49,36 @@ export function ResultPanel({
       }),
     );
   }, [result, state.seed, state.filled, config, mode]);
+
+  // "The one that got away": the best player you passed on for your weak category.
+  const missed = useMemo(() => {
+    if (
+      !result ||
+      result.perfect ||
+      !result.cappedBy ||
+      config.scoring.mode !== "shared" ||
+      !offered ||
+      offered.length === 0
+    )
+      return null;
+    const weak = result.categories.find((c) => c.label === result.cappedBy);
+    if (!weak) return null;
+    const onRoster = new Set(state.filled.map((f) => f.player.id));
+    let best: { player: PlayerEntry; adj: number } | null = null;
+    for (const p of offered) {
+      if (onRoster.has(p.id)) continue;
+      const adj = eraAdjustStats(p, config)[weak.key] ?? 0;
+      if (!best || adj > best.adj) best = { player: p, adj };
+    }
+    if (!best || best.adj <= 0) return null;
+    const statLabel = config.stats.find((s) => s.key === weak.key)?.label ?? weak.key;
+    return {
+      name: best.player.name,
+      raw: best.player.stats[weak.key] ?? 0,
+      statLabel,
+      category: weak.label,
+    };
+  }, [result, offered, config, state.filled]);
 
   if (!result) return null;
 
@@ -139,6 +171,17 @@ export function ResultPanel({
           <CategoryBar key={c.key} cat={c} />
         ))}
       </div>
+
+      {missed ? (
+        <div className="w-full rounded-xl border border-rose-400/20 bg-rose-500/[0.07] px-3 py-2.5 text-sm">
+          <span className="font-semibold text-rose-200">The one that got away:</span>{" "}
+          <span className="font-semibold text-white">{missed.name}</span>{" "}
+          <span className="tabular-nums text-white/55">
+            ({missed.raw.toFixed(1)} {missed.statLabel})
+          </span>{" "}
+          was on your board — he&apos;d have shored up your {missed.category}.
+        </div>
+      ) : null}
 
       <div className="flex w-full flex-col gap-2 sm:flex-row">
         <button

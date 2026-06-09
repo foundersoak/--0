@@ -33,6 +33,7 @@ export type GameAction =
   | { type: "SKIP_TEAM" }
   | { type: "SKIP_ERA" }
   | { type: "PICK"; playerId: string; slotId: string }
+  | { type: "UNDO" }
   | { type: "RESET"; seed?: string };
 
 const SEP = "::";
@@ -188,6 +189,19 @@ export function makeReducer(config: SportConfig, index: DataIndex) {
           round: state.round + 1,
           phase: done ? "complete" : "ready",
           result: done ? simulateSeason(filled, config) : null,
+        };
+      }
+      case "UNDO": {
+        // Step back one pick (works even after the season is simulated).
+        if (state.filled.length === 0) return state;
+        return {
+          ...state,
+          filled: state.filled.slice(0, -1),
+          usedTeamEras: state.usedTeamEras.slice(0, -1),
+          spin: null,
+          round: Math.max(0, state.round - 1),
+          phase: "ready",
+          result: null,
         };
       }
       case "RESET":
