@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { BRAND } from "@/lib/brand";
 
 export const runtime = "nodejs";
 
@@ -42,7 +43,7 @@ export async function POST(req: Request): Promise<Response> {
         body: JSON.stringify({
           from: FROM,
           to: TO,
-          subject: "blankand0 — contact form",
+          subject: `${BRAND.name} — contact form`,
           text,
           ...(email ? { reply_to: email } : {}),
         }),

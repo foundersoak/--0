@@ -1,6 +1,6 @@
 # Attribution & data sources
 
-**blankand0** is an unofficial fan game. It is not affiliated with, endorsed by, or sponsored by
+**Flawless Lineup** is an unofficial fan game. It is not affiliated with, endorsed by, or sponsored by
 the NBA, NFL, MLB, NHL, NCAA, the Premier League, or any team. Team names and colors are used
 nominatively to identify franchises; no team logos or player likenesses are used.
 

@@ -1,9 +1,10 @@
 import { ImageResponse } from "next/og";
+import { BRAND } from "@/lib/brand";
 import { decodeCard } from "@/lib/share";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "blankand0 — roster result";
+export const alt = `${BRAND.name} — roster result`;
 
 const BG = "#0b0f1a";
 const GOLD = "#FDB927";
@@ -15,7 +16,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
   const wins = card?.wins ?? 0;
   const losses = card?.losses ?? 0;
   const grade = card?.grade ?? "";
-  const brand = card?.brand ?? "blankand0";
+  const brand = card?.brand ?? "";
   const name = card?.name ?? "";
   const perfect = card?.perfect ?? false;
   const passes = card?.passes ?? [];
@@ -37,7 +38,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", fontSize: 36, fontWeight: 800 }}>
-            <span>blankand0</span>
+            <span>{BRAND.name}</span>
             <span style={{ color: GOLD }}>.</span>
           </div>
           <div style={{ display: "flex", fontSize: 30, color: "rgba(255,255,255,0.55)" }}>
@@ -118,7 +119,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", fontSize: 26, color: "rgba(255,255,255,0.5)" }}>
-          {`blankand0.vercel.app — can you go ${brand}?`}
+          {`${BRAND.url.replace(/^https?:\/\//, "")} — can you go ${brand}?`}
         </div>
       </div>
     ),
