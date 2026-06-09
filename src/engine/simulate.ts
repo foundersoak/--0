@@ -4,7 +4,17 @@
  * era adjustment, per-category gating (one weak category caps the record), and
  * a non-linear win curve.
  */
+import { hashSeed, mulberry32 } from "./rng";
 import type { PlayerEntry, SportConfig, StatKey } from "./types";
+
+/** Peak amplitude of the per-roster win wobble, in units of sqrt(seasonGames).
+ *  ~0.45 yields roughly a ±2 win typical swing over an 82-game season. */
+const VARIANCE_SPREAD = 0.45;
+/** At or above this win pace, variance never drags a record down (only up), so
+ *  a near-perfect roster isn't made unlucky into a worse record. The downside
+ *  fades in over GUARD_WIDTH just below it (~74 to ~79 wins of 82). */
+const TOP_GUARD = 0.96;
+const GUARD_WIDTH = 0.06;
 
 export interface FilledSlot {
   slotId: string;
@@ -149,9 +159,27 @@ export function simulateSeason(
   const perfect = allPass && p >= perfectThreshold;
 
   const games = config.seasonGames;
-  const wins = perfect
-    ? games
-    : Math.max(0, Math.min(games - 1, Math.round(winFraction * games)));
+  let wins: number;
+  if (perfect) {
+    wins = games;
+  } else {
+    // Deterministic per-roster variance so near-identical lineups don't all
+    // land on the exact same record. Seeded by the roster's players, so a given
+    // lineup always reproduces (required for shareable boards and server-side
+    // leaderboard verification). Triangular wobble (near zero most of the time),
+    // scaled by sqrt(seasonGames) so it feels right at any season length, and
+    // capped at games - 1 so it can never manufacture a perfect season.
+    const key = filled.map((f) => f.player.id).sort().join("|");
+    const rng = mulberry32(hashSeed(`record:${key}`));
+    let wobble = (rng() + rng() - 1) * VARIANCE_SPREAD * Math.sqrt(games);
+    // Never let variance drag a near-perfect roster down (only up): being a hair
+    // short of 82-0 shouldn't be made worse by luck. The downside fades to zero
+    // as the win pace approaches TOP_GUARD.
+    if (wobble < 0) {
+      wobble *= Math.max(0, Math.min(1, (TOP_GUARD - winFraction) / GUARD_WIDTH));
+    }
+    wins = Math.max(0, Math.min(games - 1, Math.round(winFraction * games + wobble)));
+  }
 
   return {
     wins,
@@ -161,6 +189,6 @@ export function simulateSeason(
     winFraction,
     categories,
     cappedBy: worst !== null ? (worst as CategoryResult).label : null,
-    grade: gradeFor(winFraction, perfect),
+    grade: gradeFor(perfect ? 1 : wins / games, perfect),
   };
 }
