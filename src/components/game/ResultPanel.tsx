@@ -1,11 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import type { CategoryResult, GameState } from "@/engine";
 import type { SportConfig } from "@/engine/types";
 import type { GameModeDef } from "@/lib/modes";
 import { dailyDateFromSeed, encodeShare, shareGrid } from "@/lib/share";
+import { recordResult, type RecordOutcome } from "@/lib/store";
 import { RosterBoard } from "./RosterBoard";
+import { RunHistory } from "./RunHistory";
 
 export function ResultPanel({
   config,
@@ -19,7 +21,33 @@ export function ResultPanel({
   mode?: GameModeDef;
 }) {
   const [copied, setCopied] = useState(false);
+  const [outcome, setOutcome] = useState<RecordOutcome | null>(null);
+  const recordedRef = useRef<string | null>(null);
   const result = state.result;
+
+  useEffect(() => {
+    if (!result || recordedRef.current === state.seed) return;
+    recordedRef.current = state.seed;
+    const roster = config.positions.map((slot) => ({
+      slot: slot.abbr,
+      name: state.filled.find((f) => f.slotId === slot.id)?.player.name ?? "",
+    }));
+    setOutcome(
+      recordResult({
+        sportId: config.id,
+        modeId: mode?.id ?? "classic",
+        wins: result.wins,
+        losses: result.losses,
+        grade: result.grade,
+        perfect: result.perfect,
+        seed: state.seed,
+        roster,
+        at: Date.now(),
+        date: mode?.daily ? dailyDateFromSeed(state.seed) : null,
+      }),
+    );
+  }, [result, state.seed, state.filled, config, mode]);
+
   if (!result) return null;
 
   const share = async () => {
@@ -90,6 +118,22 @@ export function ResultPanel({
         ) : null}
       </motion.div>
 
+      {outcome && (outcome.newBest || mode?.daily) ? (
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
+          {outcome.newBest ? (
+            <span className="rounded-full bg-emerald-400/90 px-2.5 py-1 font-bold text-black">
+              New personal best
+            </span>
+          ) : null}
+          {mode?.daily ? (
+            <span className="rounded-full bg-white/10 px-2.5 py-1 font-semibold text-white/70">
+              🔥 {outcome.streak}-day streak
+              {outcome.alreadyPlayedDaily ? " · already counted today" : ""}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className="w-full space-y-2">
         {result.categories.map((c) => (
           <CategoryBar key={c.key} cat={c} />
@@ -119,6 +163,8 @@ export function ResultPanel({
         </div>
         <RosterBoard config={config} state={state} />
       </div>
+
+      {outcome ? <RunHistory sportId={config.id} modeId={mode?.id ?? "classic"} /> : null}
     </div>
   );
 }
