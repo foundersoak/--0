@@ -215,15 +215,6 @@ export function ResultPanel({
         </button>
       </div>
 
-      <div className="w-full">
-        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/40">
-          Your roster
-        </div>
-        <RosterBoard config={config} state={state} />
-      </div>
-
-      {outcome ? <RunHistory sportId={config.id} modeId={mode?.id ?? "classic"} /> : null}
-
       {outcome ? (
         <Leaderboard
           sport={config.id}
@@ -234,6 +225,15 @@ export function ResultPanel({
           )}
         />
       ) : null}
+
+      <div className="w-full">
+        <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/40">
+          Your roster
+        </div>
+        <RosterBoard config={config} state={state} />
+      </div>
+
+      {outcome ? <RunHistory sportId={config.id} modeId={mode?.id ?? "classic"} /> : null}
     </div>
   );
 }
