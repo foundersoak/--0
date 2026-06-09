@@ -21,7 +21,7 @@ export function ModeTabs({
             onClick={() => onSelect(m.id)}
             title={m.blurb}
             className={[
-              "rounded-lg px-3 py-1.5 font-semibold transition",
+              "rounded-lg px-4 py-2 text-[15px] font-bold transition",
               active ? "text-black" : "text-white/60 hover:text-white",
             ].join(" ")}
             style={active ? { backgroundColor: accent } : undefined}
