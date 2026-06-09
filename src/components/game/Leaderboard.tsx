@@ -39,7 +39,6 @@ export function Leaderboard({
   }, [sport, mode, date]);
 
   useEffect(() => {
-    // Defer so the setState inside load() never runs synchronously in the effect.
     const id = setTimeout(() => void load(), 0);
     return () => clearTimeout(id);
   }, [load]);
@@ -67,37 +66,45 @@ export function Leaderboard({
 
   return (
     <div className="w-full">
+      {status !== "done" ? (
+        <div className="mb-3 rounded-xl border border-amber-400/30 bg-amber-400/[0.06] p-3">
+          <div className="mb-2 text-sm font-bold text-amber-200">
+            🏆 Put your score on the leaderboard
+          </div>
+          <div className="flex gap-2">
+            <input
+              value={handle}
+              onChange={(e) => setHandle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") void submit();
+              }}
+              placeholder="Enter a handle"
+              maxLength={20}
+              className="min-w-0 flex-1 rounded-lg border border-white/20 bg-black/30 px-3 py-2.5 text-base text-white placeholder:text-white/30 focus:border-amber-400/60 focus:outline-none"
+            />
+            <button
+              type="button"
+              onClick={submit}
+              disabled={status === "submitting"}
+              className="rounded-lg bg-amber-400 px-5 py-2.5 text-sm font-bold text-black transition hover:bg-amber-300 disabled:opacity-50"
+            >
+              {status === "submitting" ? "…" : "Post"}
+            </button>
+          </div>
+          {status === "error" ? (
+            <p className="mt-2 text-xs text-rose-300">Couldn&apos;t submit — try again.</p>
+          ) : null}
+        </div>
+      ) : (
+        <p className="mb-3 text-sm font-semibold text-emerald-300">Posted as {handle || "anon"} ✓</p>
+      )}
+
       <div className="mb-2 flex items-baseline justify-between">
         <span className="text-xs font-semibold uppercase tracking-wide text-white/40">
           Global leaderboard{date ? " · today" : ""}
         </span>
         <span className="text-[11px] capitalize text-white/30">{mode}</span>
       </div>
-
-      {status !== "done" ? (
-        <div className="mb-2 flex gap-2">
-          <input
-            value={handle}
-            onChange={(e) => setHandle(e.target.value)}
-            placeholder="your handle"
-            maxLength={20}
-            className="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/[0.03] px-3 py-2 text-sm text-white placeholder:text-white/30 focus:border-white/40 focus:outline-none"
-          />
-          <button
-            type="button"
-            onClick={submit}
-            disabled={status === "submitting"}
-            className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-bold text-black transition hover:bg-amber-300 disabled:opacity-50"
-          >
-            {status === "submitting" ? "…" : "Submit"}
-          </button>
-        </div>
-      ) : (
-        <p className="mb-2 text-xs text-emerald-300">Submitted as {handle || "anon"} ✓</p>
-      )}
-      {status === "error" ? (
-        <p className="mb-2 text-xs text-rose-300">Couldn&apos;t submit — try again.</p>
-      ) : null}
 
       {entries === null ? (
         <p className="text-xs text-white/30">Loading…</p>
@@ -129,6 +136,7 @@ export function Leaderboard({
           ))}
         </ol>
       )}
+
       <Link
         href={`/${sport}/leaderboard`}
         className="mt-3 inline-block text-xs font-semibold text-white/50 transition hover:text-white/80"

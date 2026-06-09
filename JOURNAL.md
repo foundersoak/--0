@@ -7,6 +7,11 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Leaderboard UX: prominent handle entry
+- Moved the handle/submit input from the bottom of the result screen up into a prominent amber card
+  right under the action buttons (heading + Enter-to-submit). It was previously below the roster and
+  run history, so players missed it.
+
 ### Leaderboard: support REDIS_URL (any Redis), not just Upstash REST
 - The store connected on Vercel only exposed `REDIS_URL`, but the code expected the Upstash REST API
   vars, so it silently fell back to in-memory. `lib/leaderboard.ts` now auto-selects a backend:
