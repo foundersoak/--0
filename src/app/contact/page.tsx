@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ContactForm } from "@/components/ContactForm";
 import { BRAND } from "@/lib/brand";
 
 export const metadata: Metadata = {
@@ -9,18 +10,13 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-6 py-6">
+    <div className="mx-auto max-w-xl space-y-6 py-6">
       <h1 className="text-3xl font-black text-white">Contact</h1>
       <p className="text-sm leading-relaxed text-white/70">
-        Questions, feedback, a bug, a stat that looks wrong, or a partnership idea? We&apos;d love to
-        hear from you.
+        Questions, feedback, a bug, or a stat that looks wrong? Drop us a note and we&apos;ll get back
+        to you.
       </p>
-      <a
-        href={`mailto:${BRAND.contactEmail}`}
-        className="inline-block rounded-xl bg-amber-400 px-6 py-3 font-bold text-black transition hover:bg-amber-300"
-      >
-        {BRAND.contactEmail}
-      </a>
+      <ContactForm />
       <p className="text-xs text-white/40">
         {BRAND.name} is an unofficial fan game and is not affiliated with any league or team.
       </p>
