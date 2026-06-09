@@ -179,3 +179,6 @@ export const GUIDES: Guide[] = [
 ];
 
 export const getGuide = (slug: string): Guide | undefined => GUIDES.find((g) => g.slug === slug);
+
+export const getGuideForSport = (sport: SportId): Guide | undefined =>
+  GUIDES.find((g) => g.sport === sport);
