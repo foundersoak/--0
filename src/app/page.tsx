@@ -15,47 +15,46 @@ export default function HubPage() {
       </section>
 
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {SPORT_CATALOG.map((sport) => {
-          const inner = (
-            <>
-              <div className="flex items-baseline justify-between">
-                <span
-                  className="text-3xl font-black tabular-nums"
-                  style={{ color: sport.accent }}
-                >
-                  {sport.brand}
-                </span>
-                <span className="text-sm font-bold uppercase tracking-widest text-white/40">
-                  {sport.name}
-                </span>
-              </div>
-              <div className="mt-3 text-sm text-white/55">{sport.blurb}</div>
-              <div className="mt-4 text-xs font-semibold uppercase tracking-wide">
-                {sport.live ? (
-                  <span className="text-amber-400">Play now →</span>
-                ) : (
-                  <span className="text-white/30">Coming soon</span>
-                )}
-              </div>
-            </>
-          );
-
-          const cls =
-            "block rounded-2xl border p-5 transition " +
-            (sport.live
-              ? "border-white/10 bg-white/[0.03] hover:border-white/30 hover:bg-white/[0.06]"
-              : "cursor-not-allowed border-white/5 bg-white/[0.01] opacity-60");
-
-          return sport.live ? (
-            <Link key={sport.id} href={`/${sport.id}`} className={cls}>
-              {inner}
-            </Link>
-          ) : (
-            <div key={sport.id} className={cls}>
-              {inner}
+        {SPORT_CATALOG.map((sport) => (
+          <div
+            key={sport.id}
+            className={`flex flex-col rounded-2xl border p-5 transition ${
+              sport.live
+                ? "border-white/10 bg-white/[0.03] hover:border-white/25"
+                : "border-white/5 bg-white/[0.01] opacity-60"
+            }`}
+          >
+            <div className="flex items-baseline justify-between">
+              <span className="text-3xl font-black tabular-nums" style={{ color: sport.accent }}>
+                {sport.brand}
+              </span>
+              <span className="text-sm font-bold uppercase tracking-widest text-white/40">
+                {sport.name}
+              </span>
             </div>
-          );
-        })}
+            <div className="mt-3 text-sm text-white/55">{sport.blurb}</div>
+            {sport.live ? (
+              <div className="mt-4 flex gap-2">
+                <Link
+                  href={`/${sport.id}`}
+                  className="flex-1 rounded-lg bg-amber-400 px-3 py-2 text-center text-sm font-bold text-black transition hover:bg-amber-300"
+                >
+                  Play now
+                </Link>
+                <Link
+                  href={`/${sport.id}/leaderboard`}
+                  className="flex-1 rounded-lg border border-white/15 px-3 py-2 text-center text-sm font-semibold text-white/80 transition hover:border-white/40 hover:bg-white/5"
+                >
+                  Leaderboard
+                </Link>
+              </div>
+            ) : (
+              <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-white/30">
+                Coming soon
+              </div>
+            )}
+          </div>
+        ))}
       </section>
 
       <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">

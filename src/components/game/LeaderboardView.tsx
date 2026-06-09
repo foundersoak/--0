@@ -1,37 +1,43 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { GAME_MODES, type GameModeId } from "@/lib/modes";
-import type { BoardEntry } from "@/lib/leaderboard";
+import type { BoardEntry, Period } from "@/lib/leaderboard";
 
-/** Read-only, browsable leaderboard with a tab per mode. */
+const PERIODS: { id: Period; label: string }[] = [
+  { id: "all", label: "All-time" },
+  { id: "month", label: "This month" },
+  { id: "week", label: "This week" },
+];
+
+/** Read-only, browsable leaderboard: a tab per mode, plus period filters. */
 export function LeaderboardView({ sport, accent }: { sport: string; accent: string }) {
   const [modeId, setModeId] = useState<GameModeId>("classic");
+  const [period, setPeriod] = useState<Period>("all");
   const [entries, setEntries] = useState<BoardEntry[] | null>(null);
+  const isDaily = modeId === "daily";
 
-  const load = useCallback(
-    async (mode: GameModeId) => {
-      setEntries(null);
-      try {
-        const qs = new URLSearchParams({ sport, mode });
-        if (mode === "daily") qs.set("date", new Date().toISOString().slice(0, 10));
-        const r = await fetch(`/api/leaderboard?${qs.toString()}`, { cache: "no-store" });
-        const j = (await r.json()) as { entries?: BoardEntry[] };
-        setEntries(j.entries ?? []);
-      } catch {
-        setEntries([]);
-      }
-    },
-    [sport],
-  );
+  const load = useCallback(async () => {
+    setEntries(null);
+    try {
+      const qs = new URLSearchParams({ sport, mode: modeId, limit: "50" });
+      if (isDaily) qs.set("date", new Date().toISOString().slice(0, 10));
+      else qs.set("period", period);
+      const r = await fetch(`/api/leaderboard?${qs.toString()}`, { cache: "no-store" });
+      const j = (await r.json()) as { entries?: BoardEntry[] };
+      setEntries(j.entries ?? []);
+    } catch {
+      setEntries([]);
+    }
+  }, [sport, modeId, period, isDaily]);
 
   useEffect(() => {
-    const id = setTimeout(() => void load(modeId), 0);
+    const id = setTimeout(() => void load(), 0);
     return () => clearTimeout(id);
-  }, [load, modeId]);
+  }, [load]);
 
   return (
-    <div>
-      <div className="mb-4 inline-flex rounded-xl border border-white/10 bg-white/[0.03] p-1">
+    <div className="space-y-3">
+      <div className="inline-flex rounded-xl border border-white/10 bg-white/[0.03] p-1">
         {GAME_MODES.map((m) => {
           const active = m.id === modeId;
           return (
@@ -51,6 +57,27 @@ export function LeaderboardView({ sport, accent }: { sport: string; accent: stri
         })}
       </div>
 
+      {isDaily ? (
+        <div className="text-xs text-white/40">
+          Today&apos;s board · {new Date().toISOString().slice(0, 10)}
+        </div>
+      ) : (
+        <div className="flex gap-2 text-xs">
+          {PERIODS.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setPeriod(p.id)}
+              className={`rounded-full px-3 py-1 font-semibold transition ${
+                period === p.id ? "bg-white/15 text-white" : "text-white/45 hover:text-white/80"
+              }`}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {entries === null ? (
         <p className="text-sm text-white/40">Loading…</p>
       ) : entries.length === 0 ? (
@@ -65,7 +92,7 @@ export function LeaderboardView({ sport, accent }: { sport: string; accent: stri
               className={`flex items-center justify-between px-4 py-3 ${i < 3 ? "bg-white/[0.02]" : ""}`}
             >
               <span className="flex min-w-0 items-center gap-3">
-                <span className="w-6 text-right text-lg font-black tabular-nums text-white/30">
+                <span className="w-7 text-right text-lg font-black tabular-nums text-white/30">
                   {i + 1}
                 </span>
                 <span className="truncate font-semibold text-white">{e.handle}</span>

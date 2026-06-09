@@ -7,6 +7,15 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Leaderboard upgrades + hub cards
+- **Hub cards** now show **Play now** + **Leaderboard** buttons for each live sport.
+- **Time periods**: skill-mode submissions write to **all-time + monthly + weekly** boards
+  (monthly/weekly TTL'd); the `/[sport]/leaderboard` page gained All-time / This month / This week
+  sub-tabs. Daily stays per-day.
+- **Personal rank**: POST returns the submitter's rank + board size, shown as "Posted as X — #N of M".
+- **Bigger lists**: result screen top 10, full page top 50 (`?limit` up to 100).
+- Verified in-process: multi-write + rank (strong → #1, weak → #2; all/month/week populated).
+
 ### Leaderboard UX: prominent handle entry
 - Moved the handle/submit input from the bottom of the result screen up into a prominent amber card
   right under the action buttons (heading + Enter-to-submit). It was previously below the roster and

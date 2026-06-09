@@ -1,18 +1,31 @@
 import { NextResponse } from "next/server";
 import { simulateSeason, type FilledSlot } from "@/engine";
-import { boardKey, submitScore, topScores, type BoardEntry } from "@/lib/leaderboard";
+import {
+  boardKeyForView,
+  boardKeysForSubmit,
+  rankAndTotal,
+  submitScore,
+  topScores,
+  type BoardEntry,
+  type Period,
+} from "@/lib/leaderboard";
 import { getSport } from "@/sports/registry";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+const PERIODS: Period[] = ["all", "month", "week", "day"];
+
 export async function GET(req: Request): Promise<Response> {
   const { searchParams } = new URL(req.url);
   const sport = searchParams.get("sport") ?? "";
   const mode = searchParams.get("mode") ?? "classic";
+  const periodParam = searchParams.get("period");
+  const period: Period = PERIODS.includes(periodParam as Period) ? (periodParam as Period) : "all";
   const date = searchParams.get("date");
+  const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 20));
   if (!getSport(sport)) return NextResponse.json({ error: "unknown sport" }, { status: 400 });
-  const entries = await topScores(boardKey(sport, mode, date), 20);
+  const entries = await topScores(boardKeyForView(sport, mode, period, date), limit);
   return NextResponse.json({ entries });
 }
 
@@ -73,12 +86,19 @@ export async function POST(req: Request): Promise<Response> {
     perfect: result.perfect,
     at: Date.now(),
   };
-  await submitScore(boardKey(body.sport ?? "", body.mode ?? "classic", body.date ?? null), entry);
+
+  // Skill modes post to all-time + monthly + weekly; daily posts to the day board.
+  const boards = boardKeysForSubmit(body.sport ?? "", body.mode ?? "classic", body.date ?? null);
+  for (const b of boards) await submitScore(b.key, entry, b.ttl);
+  const { rank, total } = await rankAndTotal(boards[0].key, entry);
+
   return NextResponse.json({
     ok: true,
     wins: result.wins,
     losses: result.losses,
     grade: result.grade,
     perfect: result.perfect,
+    rank,
+    total,
   });
 }
