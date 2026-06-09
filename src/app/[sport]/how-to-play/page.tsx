@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumb, faqPage, faqsFor } from "@/lib/seo";
 import { getSport, LIVE_SPORT_IDS } from "@/sports/registry";
 
 export const dynamicParams = false;
@@ -17,7 +19,11 @@ export async function generateMetadata({
   const { sport } = await params;
   const mod = getSport(sport);
   if (!mod) return {};
-  return { title: `How to play ${mod.config.brand} ${mod.config.name}` };
+  return {
+    title: `How to play ${mod.config.brand} ${mod.config.name}`,
+    description: `How to play ${mod.config.brand}, the ${mod.config.name} all-time roster game: rules, scoring, and frequently asked questions.`,
+    alternates: { canonical: `/${sport}/how-to-play` },
+  };
 }
 
 export default async function HowToPlay({ params }: { params: Promise<{ sport: string }> }) {
@@ -25,6 +31,15 @@ export default async function HowToPlay({ params }: { params: Promise<{ sport: s
   const mod = getSport(sport);
   if (!mod) notFound();
   const c = mod.config;
+  const faqs = faqsFor(c);
+  const jsonLd = [
+    faqPage(faqs),
+    breadcrumb([
+      { name: "Home", path: "/" },
+      { name: `${c.name} ${c.brand}`, path: `/${sport}` },
+      { name: "How to play", path: `/${sport}/how-to-play` },
+    ]),
+  ];
 
   const rules = [
     `Each round, a slot machine gives you a random franchise and decade.`,
@@ -37,6 +52,17 @@ export default async function HowToPlay({ params }: { params: Promise<{ sport: s
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
+      <JsonLd data={jsonLd} />
+      <nav className="text-xs text-white/40">
+        <Link href="/" className="hover:text-white/70">
+          Home
+        </Link>{" "}
+        /{" "}
+        <Link href={`/${sport}`} className="hover:text-white/70">
+          {c.name} {c.brand}
+        </Link>{" "}
+        / <span className="text-white/60">How to play</span>
+      </nav>
       <div>
         <div className="text-4xl font-black tabular-nums" style={{ color: c.theme.accent }}>
           {c.brand}
@@ -69,6 +95,20 @@ export default async function HowToPlay({ params }: { params: Promise<{ sport: s
           ))}
         </div>
       </div>
+
+      <section>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-white/50">
+          Frequently asked questions
+        </h2>
+        <dl className="space-y-3">
+          {faqs.map((qa) => (
+            <div key={qa.q} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+              <dt className="font-semibold text-white">{qa.q}</dt>
+              <dd className="mt-1.5 text-sm leading-relaxed text-white/60">{qa.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       <Link
         href={`/${sport}`}

@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { GUIDES, getGuide } from "@/content/guides";
 import { BRAND } from "@/lib/brand";
+import { breadcrumb } from "@/lib/seo";
 import { getCatalogEntry, getSport } from "@/sports/registry";
 
 export const dynamicParams = false;
@@ -42,20 +44,36 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   const accent = cat?.accent ?? "#FDB927";
   const brand = cat?.brand ?? "";
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: g.title,
-    description: g.description,
-    datePublished: g.published,
-    dateModified: g.published,
-    author: { "@type": "Organization", name: BRAND.name },
-    publisher: { "@type": "Organization", name: BRAND.name },
-    mainEntityOfPage: `${BRAND.url}/guides/${g.slug}`,
-  };
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: g.title,
+      description: g.description,
+      datePublished: g.published,
+      dateModified: g.published,
+      author: { "@type": "Organization", name: BRAND.name },
+      publisher: { "@type": "Organization", name: BRAND.name },
+      mainEntityOfPage: `${BRAND.url}/guides/${g.slug}`,
+    },
+    breadcrumb([
+      { name: "Home", path: "/" },
+      { name: "Guides", path: "/guides" },
+      { name: g.title, path: `/guides/${g.slug}` },
+    ]),
+  ];
 
   return (
     <article className="mx-auto max-w-2xl space-y-6 py-6">
+      <nav className="text-xs text-white/40">
+        <Link href="/" className="hover:text-white/70">
+          Home
+        </Link>{" "}
+        /{" "}
+        <Link href="/guides" className="hover:text-white/70">
+          Guides
+        </Link>
+      </nav>
       <div className="text-xs font-semibold uppercase tracking-[0.2em]" style={{ color: accent }}>
         {cat?.name ?? g.sport.toUpperCase()} · {brand}
       </div>
@@ -124,7 +142,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
         </Link>
       </div>
 
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
     </article>
   );
 }
