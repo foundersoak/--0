@@ -7,6 +7,12 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Leaderboard: support REDIS_URL (any Redis), not just Upstash REST
+- The store connected on Vercel only exposed `REDIS_URL`, but the code expected the Upstash REST API
+  vars, so it silently fell back to in-memory. `lib/leaderboard.ts` now auto-selects a backend:
+  Upstash REST → **Redis over TCP via ioredis (`REDIS_URL`/`KV_URL`)** → in-memory. Added
+  `serverExternalPackages: ["ioredis"]` so the client is required at runtime, not bundled.
+
 ### Browsable leaderboard page
 - New **`/[sport]/leaderboard`** page (`LeaderboardView`) with mode tabs (Casual/Expert/Daily) so
   anyone can check standings without finishing a game. Added a **Leaderboard** nav link to the game
