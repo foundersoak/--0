@@ -1,7 +1,7 @@
 /**
- * Reserved, fixed-size ad placeholder. Renders nothing visually intrusive now;
- * the monetization skill wires AdSense/GPT into these later. Fixed dimensions
- * keep layout shift (CLS) at zero.
+ * Ad placeholder slot. Renders nothing until ads are actually enabled
+ * (NEXT_PUBLIC_ENABLE_ADS="true"), so no empty "Advertisement" box is shown to
+ * users. The monetization skill flips the flag and drops AdSense/GPT in here.
  */
 export function AdSlot({
   format = "leaderboard",
@@ -10,6 +10,8 @@ export function AdSlot({
   format?: "leaderboard" | "rectangle" | "mobile";
   className?: string;
 }) {
+  if (process.env.NEXT_PUBLIC_ENABLE_ADS !== "true") return null;
+
   const size =
     format === "rectangle"
       ? "h-[250px] w-[300px]"

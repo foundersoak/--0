@@ -13,8 +13,9 @@ export interface BoardEntry {
   at: number;
 }
 
-const KV_URL = process.env.KV_REST_API_URL;
-const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+// Accept either the Vercel KV or the Upstash Redis variable names.
+const KV_URL = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
 export const hasKV = Boolean(KV_URL && KV_TOKEN);
 
 const mem = new Map<string, BoardEntry[]>();
