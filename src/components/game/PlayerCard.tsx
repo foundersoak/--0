@@ -5,17 +5,19 @@ export function StatLine({
   config,
   player,
   className = "",
+  hideStats = false,
 }: {
   config: SportConfig;
   player: PlayerEntry;
   className?: string;
+  hideStats?: boolean;
 }) {
   return (
     <div className={`flex flex-wrap gap-x-3 gap-y-1 ${className}`}>
       {config.stats.map((s) => (
         <div key={s.key} className="flex items-baseline gap-1 tabular-nums">
           <span className="text-sm font-semibold text-white">
-            {fmtStat(player.stats[s.key] ?? 0, s.decimals ?? 1)}
+            {hideStats ? "–" : fmtStat(player.stats[s.key] ?? 0, s.decimals ?? 1)}
           </span>
           <span className="text-[10px] font-medium uppercase tracking-wide text-white/45">
             {s.label}
@@ -32,12 +34,14 @@ export function PlayerCard({
   onClick,
   selected = false,
   dimmed = false,
+  hideStats = false,
 }: {
   config: SportConfig;
   player: PlayerEntry;
   onClick?: () => void;
   selected?: boolean;
   dimmed?: boolean;
+  hideStats?: boolean;
 }) {
   const [primary, secondary] = teamColors(config, player.team);
   const interactive = Boolean(onClick);
@@ -69,7 +73,7 @@ export function PlayerCard({
           {eraLabel(config, player.era)}
         </span>
       </div>
-      <StatLine config={config} player={player} className="mt-2" />
+      <StatLine config={config} player={player} className="mt-2" hideStats={hideStats} />
       {player.notable ? (
         <div className="mt-2 truncate text-[11px] italic text-white/40">{player.notable}</div>
       ) : null}

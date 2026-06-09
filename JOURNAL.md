@@ -7,6 +7,17 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Game modes + live category meters (making it *better*, not a copy)
+- **Three modes** (`src/lib/modes.ts`, `ModeTabs`): **Classic** (full stats + live meters),
+  **Hoop IQ** (stats *and* meters hidden — a pure-knowledge hard mode), **Daily** (one shared board
+  per UTC day, seeded by date).
+- **Live category meters** (`LiveMeters`) — our improvement on the original: reuse the real
+  partial-lineup simulation so you watch each of the five floors turn green as you draft, instead of
+  only learning you failed at the very end.
+- **Wordle-style spoiler-free share** (`shareGrid` in `lib/share.ts`): 🟩/🟥 per category + the
+  record, with a Daily date tag — the emoji grid was the actual viral engine behind Wordle.
+- Threaded `hideStats` / `liveMeters` through GameClient → GameBoard → CandidateList / PlayerCard.
+
 ### NBA data-quality fixes — found by playtesting / reviewing
 - **Positions tightened:** coarse "F"/"C-F" no longer makes centers eligible at small forward
   (174 → 0; e.g. Joel Embiid is now C-only). A guard-forward maps to the wing (SG/SF) instead of all
