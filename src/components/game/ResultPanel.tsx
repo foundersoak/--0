@@ -6,6 +6,7 @@ import type { PlayerEntry, SportConfig } from "@/engine/types";
 import type { GameModeDef } from "@/lib/modes";
 import { dailyDateFromSeed, encodeCard, shareGrid, type ShareCard } from "@/lib/share";
 import { recordResult, type RecordOutcome } from "@/lib/store";
+import { Leaderboard } from "./Leaderboard";
 import { RosterBoard } from "./RosterBoard";
 import { RunHistory } from "./RunHistory";
 
@@ -219,6 +220,17 @@ export function ResultPanel({
       </div>
 
       {outcome ? <RunHistory sportId={config.id} modeId={mode?.id ?? "classic"} /> : null}
+
+      {outcome ? (
+        <Leaderboard
+          sport={config.id}
+          mode={mode?.id ?? "classic"}
+          date={mode?.daily ? dailyDateFromSeed(state.seed) : null}
+          playerIds={config.positions.map(
+            (slot) => state.filled.find((f) => f.slotId === slot.id)?.player.id ?? "",
+          )}
+        />
+      ) : null}
     </div>
   );
 }
