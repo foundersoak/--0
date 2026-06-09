@@ -7,6 +7,17 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Deploy hardening (Vercel)
+- Confirmed production auto-deploys from this branch (Vercel dashboard shows every commit "Ready" in
+  ~30s; `be7410e` is live).
+- Added `vercel.json` pinning `framework: nextjs` + pnpm frozen install + `next build` (matches
+  Vercel's auto-detected defaults, so it's a no-op for the working build but makes settings explicit).
+- Added `.env.example` documenting the optional KV leaderboard vars, plus a `!.env.example` gitignore
+  exception so it's tracked.
+- Created a stable **`main`** branch as the long-term production line so this branch can be used for
+  preview deploys. To activate: set the Vercel Production Branch (and GitHub default) to `main`; ship
+  to prod by merging this branch → `main`.
+
 ### Global leaderboard (server-verified, KV-ready)
 - `GET/POST /api/leaderboard` (`app/api/leaderboard/route.ts`) + `lib/leaderboard.ts`: per
   sport/mode/day boards; `Leaderboard` component (handle + submit + top 20) on the result screen.
