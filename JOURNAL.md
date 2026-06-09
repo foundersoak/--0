@@ -5,6 +5,19 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ---
 
+## 2026-06-09
+
+### NBA data-quality fixes — found by playtesting / reviewing
+- **Positions tightened:** coarse "F"/"C-F" no longer makes centers eligible at small forward
+  (174 → 0; e.g. Joel Embiid is now C-only). A guard-forward maps to the wing (SG/SF) instead of all
+  four perimeter slots, so players can only be placed where they actually played.
+- **Pre-1974 steals/blocks:** imputation now covers the early 1970s as well as the 1960s (344 1970s
+  players previously carried 0 → now 0), so "Steals" is no longer an artificial bottleneck.
+- **Name truncation:** corrected recognizable 3-word names the historical source truncated
+  (Joe Barry Carroll, Metta World Peace, Nick Van Exel, Michael Ray Richardson, World B. Free).
+- *Why:* a deep review of both 82-0 versions + a few played games surfaced these; fixes keep the NBA
+  feel honest before fanning out to other leagues.
+
 ## 2026-06-08
 
 ### Journal added
