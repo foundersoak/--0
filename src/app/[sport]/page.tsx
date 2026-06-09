@@ -46,12 +46,20 @@ export default async function SportPage({ params }: { params: Promise<{ sport: s
             {c.name} <span className="font-normal text-white/55">— {c.tagline}</span>
           </h1>
         </div>
-        <Link
-          href={`/${sport}/how-to-play`}
-          className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:border-white/40 hover:bg-white/5"
-        >
-          How to play
-        </Link>
+        <div className="flex gap-2">
+          <Link
+            href={`/${sport}/leaderboard`}
+            className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:border-white/40 hover:bg-white/5"
+          >
+            Leaderboard
+          </Link>
+          <Link
+            href={`/${sport}/how-to-play`}
+            className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-semibold text-white/70 transition hover:border-white/40 hover:bg-white/5"
+          >
+            How to play
+          </Link>
+        </div>
       </div>
 
       <GameClient sportId={sport} />

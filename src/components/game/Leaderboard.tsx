@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import type { BoardEntry } from "@/lib/leaderboard";
 
@@ -128,6 +129,12 @@ export function Leaderboard({
           ))}
         </ol>
       )}
+      <Link
+        href={`/${sport}/leaderboard`}
+        className="mt-3 inline-block text-xs font-semibold text-white/50 transition hover:text-white/80"
+      >
+        View full leaderboard →
+      </Link>
     </div>
   );
 }
