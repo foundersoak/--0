@@ -7,6 +7,13 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Local leaderboard + Daily streak (`src/lib/store.ts`)
+- **Personal bests + recent runs** per sport/mode, surfaced as a "Your runs" panel on the result
+  screen (`RunHistory`), plus a "New personal best" badge.
+- **Daily streak**: completing the Daily bumps a 🔥 streak (consecutive days); only the first
+  completion each day counts, and a banner flags when today's board is already done.
+- All localStorage + SSR-safe. A global leaderboard can layer on later via a serverless route + KV.
+
 ### Game modes + live category meters (making it *better*, not a copy)
 - **Three modes** (`src/lib/modes.ts`, `ModeTabs`): **Classic** (full stats + live meters),
   **Hoop IQ** (stats *and* meters hidden — a pure-knowledge hard mode), **Daily** (one shared board

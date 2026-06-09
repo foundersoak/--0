@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import type { PlayerDataset } from "@/engine/types";
 import { getCatalogEntry, getSport } from "@/sports/registry";
 import { getMode, seedForMode, type GameModeId } from "@/lib/modes";
+import { dailyDateFromSeed } from "@/lib/share";
+import { getDailyState } from "@/lib/store";
 import { GameBoard } from "./GameBoard";
 import { ModeTabs } from "./ModeTabs";
 
@@ -13,6 +15,7 @@ export function GameClient({ sportId }: { sportId: string }) {
   const [modeId, setModeId] = useState<GameModeId>("classic");
   const mode = getMode(modeId);
   const [seed, setSeed] = useState(() => seedForMode(getMode("classic"), sportId));
+  const [dailyInfo, setDailyInfo] = useState<{ streak: number; playedToday: boolean } | null>(null);
 
   useEffect(() => {
     let alive = true;
@@ -25,8 +28,16 @@ export function GameClient({ sportId }: { sportId: string }) {
   }, [mod]);
 
   const selectMode = (id: GameModeId) => {
+    const m = getMode(id);
+    const nextSeed = seedForMode(m, sportId);
     setModeId(id);
-    setSeed(seedForMode(getMode(id), sportId));
+    setSeed(nextSeed);
+    if (m.daily) {
+      const st = getDailyState(sportId, dailyDateFromSeed(nextSeed) ?? "");
+      setDailyInfo({ streak: st.streak, playedToday: st.playedToday });
+    } else {
+      setDailyInfo(null);
+    }
   };
 
   if (!mod) {
@@ -39,6 +50,12 @@ export function GameClient({ sportId }: { sportId: string }) {
         <ModeTabs current={modeId} onSelect={selectMode} accent={accent} />
         <p className="text-xs text-white/40">{mode.blurb}</p>
       </div>
+      {mode.daily && dailyInfo?.playedToday ? (
+        <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55">
+          You&apos;ve completed today&apos;s Daily — 🔥 {dailyInfo.streak}-day streak. Replay for fun
+          (it won&apos;t change your streak) or switch to Classic.
+        </div>
+      ) : null}
       {!dataset ? (
         <div className="flex h-40 items-center justify-center text-white/40">
           <span className="animate-pulse">Loading legends…</span>
