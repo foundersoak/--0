@@ -14,7 +14,9 @@ export function RosterBoard({ config, state }: { config: SportConfig; state: Gam
           <div
             key={slot.id}
             style={{ borderLeftColor: player ? primary : "#334155" }}
-            className="flex items-center gap-3 rounded-xl border border-l-4 border-white/10 bg-white/[0.02] px-3 py-2"
+            className={`flex items-center gap-3 rounded-xl border border-l-4 px-3 py-2.5 transition ${
+              player ? "border-white/15 bg-white/[0.05]" : "border-white/10 bg-white/[0.02]"
+            }`}
           >
             <span className="w-10 shrink-0 text-center text-xs font-bold uppercase tracking-wide text-white/40">
               {slot.abbr}
@@ -22,7 +24,7 @@ export function RosterBoard({ config, state }: { config: SportConfig; state: Gam
             {player ? (
               <div className="flex min-w-0 flex-1 items-center justify-between gap-2">
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold text-white">{player.name}</div>
+                  <div className="truncate text-[15px] font-semibold text-white">{player.name}</div>
                   <div className="truncate text-xs text-white/50">
                     {teamName(config, player.team, player.era)}
                   </div>

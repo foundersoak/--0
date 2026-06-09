@@ -17,16 +17,16 @@ export interface GameModeDef {
 export const GAME_MODES: GameModeDef[] = [
   {
     id: "classic",
-    label: "Classic",
-    blurb: "Full stats + live team meters",
+    label: "Casual",
+    blurb: "Every player's stats shown + live meters",
     hideStats: false,
     liveMeters: true,
     daily: false,
   },
   {
     id: "hoopiq",
-    label: "Hoop IQ",
-    blurb: "Stats & meters hidden — pure knowledge",
+    label: "Expert",
+    blurb: "Stats hidden — draft on knowledge",
     hideStats: true,
     liveMeters: false,
     daily: false,

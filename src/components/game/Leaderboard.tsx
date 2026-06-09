@@ -38,9 +38,9 @@ export function Leaderboard({
   }, [sport, mode, date]);
 
   useEffect(() => {
-    // setState only runs after the fetch resolves, not during the effect body.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    void load();
+    // Defer so the setState inside load() never runs synchronously in the effect.
+    const id = setTimeout(() => void load(), 0);
+    return () => clearTimeout(id);
   }, [load]);
 
   const submit = async () => {

@@ -81,6 +81,8 @@ export function ResultPanel({
     };
   }, [result, offered, config, state.filled]);
 
+  const winsCount = useCountUp(result?.wins ?? 0);
+
   if (!result) return null;
 
   const share = async () => {
@@ -128,8 +130,9 @@ export function ResultPanel({
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="flex flex-col items-center"
+        className="relative flex flex-col items-center"
       >
+        {result.perfect ? <Confetti /> : null}
         {mode?.daily ? (
           <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">
             Daily · {dailyDateFromSeed(state.seed)}
@@ -142,7 +145,7 @@ export function ResultPanel({
         ) : null}
         <div className="flex items-center gap-3">
           <span className="text-6xl font-black tabular-nums text-white sm:text-7xl">
-            {result.wins}-{result.losses}
+            {winsCount}-{result.wins + result.losses - winsCount}
           </span>
           <span
             className={`rounded-xl px-3 py-1 text-2xl font-black ${
@@ -231,6 +234,61 @@ export function ResultPanel({
           )}
         />
       ) : null}
+    </div>
+  );
+}
+
+function useCountUp(target: number, durationMs = 750): number {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const start = typeof performance !== "undefined" ? performance.now() : Date.now();
+    const frame = (now: number) => {
+      const t = Math.min(1, (now - start) / durationMs);
+      setN(Math.round(target * (1 - Math.pow(1 - t, 3)))); // easeOutCubic
+      if (t < 1) raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, [target, durationMs]);
+  return n;
+}
+
+const CONFETTI_COLORS = ["#FDB927", "#34d399", "#60a5fa", "#f472b6", "#f87171"];
+
+// Built once at module load (not during render) so the component stays render-pure.
+const CONFETTI_PIECES = Array.from({ length: 32 }, (_, i) => ({
+  id: i,
+  x: (Math.random() * 2 - 1) * 280,
+  y: (Math.random() * 2 - 1) * 180,
+  rot: Math.random() * 720 - 360,
+  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+  delay: Math.random() * 0.12,
+  size: 6 + Math.random() * 6,
+  dur: 1 + Math.random() * 0.7,
+}));
+
+function Confetti() {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 flex items-center justify-center"
+      aria-hidden
+    >
+      {CONFETTI_PIECES.map((p) => (
+        <motion.span
+          key={p.id}
+          initial={{ x: 0, y: 0, opacity: 1, rotate: 0 }}
+          animate={{ x: p.x, y: p.y, opacity: 0, rotate: p.rot }}
+          transition={{ duration: p.dur, delay: p.delay, ease: "easeOut" }}
+          style={{
+            position: "absolute",
+            width: p.size,
+            height: p.size,
+            backgroundColor: p.color,
+            borderRadius: 2,
+          }}
+        />
+      ))}
     </div>
   );
 }

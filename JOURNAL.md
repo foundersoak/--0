@@ -7,6 +7,18 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Visual polish + UX feedback
+- **Slot-machine reel**: spinning now flashes random franchises and decelerates onto your draw
+  (`SlotReel`); pulsing ring + bigger Spin button.
+- **Result reveal**: animated count-up on the record + a confetti burst on an undefeated season.
+- **Mode renames** (clearer, sport-agnostic): Classic→**Casual**, Hoop IQ→**Expert** (ids kept stable
+  so saved scores/leaderboard keys don't break); Daily unchanged.
+- **Bigger fonts + more tactile**: larger player names, hover-lift on player cards, bigger mode tabs,
+  filled-slot highlight on the roster board.
+- **Ads hidden until real**: `AdSlot` renders nothing unless `NEXT_PUBLIC_ENABLE_ADS=true` (no more
+  empty "Advertisement" box).
+- **Leaderboard KV-compat**: accepts either `KV_REST_API_*` or `UPSTASH_REDIS_REST_*` env names.
+
 ### Deploy hardening (Vercel)
 - Confirmed production auto-deploys from this branch (Vercel dashboard shows every commit "Ready" in
   ~30s; `be7410e` is live).

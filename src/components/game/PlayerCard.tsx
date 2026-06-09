@@ -54,14 +54,16 @@ export function PlayerCard({
       style={{ borderLeftColor: primary }}
       className={[
         "group w-full overflow-hidden rounded-xl border border-l-4 border-white/10 bg-white/[0.03] p-3 text-left transition",
-        interactive ? "cursor-pointer hover:border-white/25 hover:bg-white/[0.07]" : "cursor-default",
+        interactive
+          ? "cursor-pointer hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.07] hover:shadow-lg hover:shadow-black/30 active:translate-y-0"
+          : "cursor-default",
         selected ? "ring-2 ring-amber-400" : "",
         dimmed ? "opacity-40" : "",
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="truncate font-semibold leading-tight text-white">{player.name}</div>
+          <div className="truncate text-[15px] font-bold leading-tight text-white">{player.name}</div>
           <div className="truncate text-xs text-white/55">
             {teamName(config, player.team, player.era)}
           </div>
