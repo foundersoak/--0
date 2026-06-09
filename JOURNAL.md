@@ -7,6 +7,16 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Global leaderboard (server-verified, KV-ready)
+- `GET/POST /api/leaderboard` (`app/api/leaderboard/route.ts`) + `lib/leaderboard.ts`: per
+  sport/mode/day boards; `Leaderboard` component (handle + submit + top 20) on the result screen.
+- **Anti-cheat**: POST re-simulates the submitted roster server-side and enforces era diversity, so
+  the stored record is the engine's truth — fake scores are rejected. Verified in-process: valid
+  roster → 200 (82-0, S); 5 same-era → 400; unknown player → 400; GET returns the stored entry.
+- Storage uses **Vercel KV / Upstash REST** when `KV_REST_API_URL` + `KV_REST_API_TOKEN` are set,
+  else an in-memory dev fallback. Going live globally = add a free KV store + those env vars (no code
+  change).
+
 ### Branding → blankand0 + dynamic OG share cards
 - Rebranded the hub to **blankand0** (`lib/brand.ts`, `metadataBase` → https://blankand0.vercel.app)
   to match the live Vercel deploy.
