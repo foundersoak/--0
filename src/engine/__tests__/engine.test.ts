@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { createEngine, eraAdjustStats, simulateSeason, type FilledSlot } from "@/engine";
+import {
+  createEngine,
+  eraAdjustStats,
+  simulateSeason,
+  type FilledSlot,
+  type GameState,
+} from "@/engine";
 import type { PlayerDataset, PlayerEntry } from "@/engine/types";
 import nbaConfig from "@/sports/nba/config";
 import nbaData from "@/sports/nba/data.json";
@@ -95,5 +101,21 @@ describe("full playthrough via the reducer", () => {
     expect(s.phase).toBe("complete");
     expect(s.filled).toHaveLength(5);
     expect(new Set(s.filled.map((f) => f.player.era)).size).toBe(5);
+  });
+
+  it("UNDO steps back one pick (and is a no-op on an empty roster)", () => {
+    const pickOnce = (st: GameState): GameState => {
+      st = engine.reducer(st, { type: "SPIN" });
+      const cand = st.spin!.candidates[0];
+      const slot = engine.eligibleSlots(st, cand)[0];
+      return engine.reducer(st, { type: "PICK", playerId: cand.id, slotId: slot.id });
+    };
+    let s = pickOnce(pickOnce(engine.initial("undo-1")));
+    expect(s.filled).toHaveLength(2);
+    s = engine.reducer(s, { type: "UNDO" });
+    expect(s.filled).toHaveLength(1);
+    expect(s.phase).toBe("ready");
+    expect(s.result).toBeNull();
+    expect(engine.reducer(engine.initial("undo-2"), { type: "UNDO" }).filled).toHaveLength(0);
   });
 });

@@ -7,6 +7,13 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### "One that got away" + Undo (post-game polish, both improvements on the original)
+- After a non-perfect game, `ResultPanel` replays your passed-over candidates (tracked in
+  `GameBoard`) to name the best player you skipped for your weakest/capped category — e.g. capped by
+  Steals → "Maurice Cheeks (2.3 SPG) was on your board." Real "one more try" fuel.
+- **Undo last pick** (`UNDO` engine action + button) — works even from the result screen; the
+  original has no undo. Covered by a new engine test (8 total).
+
 ### Local leaderboard + Daily streak (`src/lib/store.ts`)
 - **Personal bests + recent runs** per sport/mode, surfaced as a "Your runs" panel on the result
   screen (`RunHistory`), plus a "New personal best" badge.
