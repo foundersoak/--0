@@ -116,10 +116,10 @@ export default function PrivacyPage() {
       <Section title="Changes & contact">
         <p>
           We may update this policy as the site evolves; the effective date above will change
-          accordingly. Questions? Email{" "}
-          <a className="underline hover:text-white" href={`mailto:${BRAND.contactEmail}`}>
-            {BRAND.contactEmail}
-          </a>
+          accordingly. Questions? Reach us through the{" "}
+          <Link className="underline hover:text-white" href="/contact">
+            contact form
+          </Link>
           .
         </p>
       </Section>
