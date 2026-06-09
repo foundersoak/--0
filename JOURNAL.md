@@ -7,6 +7,13 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Contact form (no email shown anywhere)
+- Replaced the displayed contact email with a minimal **contact form** (`ContactForm` + `/api/contact`)
+  that delivers via **Resend** or **Formspree** (whichever env vars are set) — the destination inbox
+  is a server-side secret, never shown on the site. Includes a honeypot spam guard.
+- Removed `contactEmail` from `lib/brand.ts`; the Privacy page links to the form. Contact delivery env
+  vars documented in `.env.example`.
+
 ### Legal/compliance pages (attribution, privacy, contact)
 - `/attribution` — a real page for the footer's previously-dead "Attribution" link, listing the NBA
   open-data sources + the unofficial/no-logos disclaimer.
