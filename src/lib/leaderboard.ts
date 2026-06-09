@@ -1,8 +1,8 @@
 /**
  * Global leaderboard storage. Auto-selects a backend from env vars:
- *   1. Upstash REST  — KV_REST_API_URL/UPSTASH_REDIS_REST_URL + matching token
- *   2. Redis (TCP)   — REDIS_URL / KV_URL, via ioredis
- *   3. In-memory     — local dev fallback (resets per instance)
+ *   1. Upstash REST: KV_REST_API_URL/UPSTASH_REDIS_REST_URL + matching token
+ *   2. Redis (TCP):  REDIS_URL / KV_URL, via ioredis
+ *   3. In-memory:    local dev fallback (resets per instance)
  * Server-only (imported by the API route, which runs on the Node.js runtime).
  */
 import type IORedis from "ioredis";

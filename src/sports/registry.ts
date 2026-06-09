@@ -15,7 +15,7 @@ export const SPORTS: Partial<Record<SportId, SportModule>> = {
   },
 };
 
-/** Display catalog for the hub — includes sports that aren't live yet. */
+/** Display catalog for the hub, includes sports that aren't live yet. */
 export interface CatalogEntry {
   id: SportId;
   name: string;

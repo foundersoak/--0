@@ -6,13 +6,13 @@ export const runtime = "nodejs";
 interface Body {
   email?: string;
   message?: string;
-  website?: string; // honeypot — real users never fill this
+  website?: string; // honeypot, real users never fill this
 }
 
 /**
  * Contact form delivery. Sends via Resend if configured, else forwards to a
  * Formspree endpoint, else reports "not configured". The destination inbox is a
- * server-side env var — no email address is ever exposed on the site.
+ * server-side env var, no email address is ever exposed on the site.
  */
 export async function POST(req: Request): Promise<Response> {
   let body: Body;
@@ -43,7 +43,7 @@ export async function POST(req: Request): Promise<Response> {
         body: JSON.stringify({
           from: FROM,
           to: TO,
-          subject: `${BRAND.name} — contact form`,
+          subject: `${BRAND.name}, contact form`,
           text,
           ...(email ? { reply_to: email } : {}),
         }),
@@ -62,6 +62,6 @@ export async function POST(req: Request): Promise<Response> {
     }
     return NextResponse.json({ error: "Contact isn't set up yet." }, { status: 503 });
   } catch {
-    return NextResponse.json({ error: "Couldn't send right now — try again later." }, { status: 502 });
+    return NextResponse.json({ error: "Couldn't send right now, try again later." }, { status: 502 });
   }
 }

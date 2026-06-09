@@ -1,6 +1,6 @@
 /**
  * The scoring brain. A pure function of the lineup (no RNG): the same roster
- * always produces the same record. This is where the addictive "feel" lives —
+ * always produces the same record. This is where the addictive "feel" lives:
  * era adjustment, per-category gating (one weak category caps the record), and
  * a non-linear win curve.
  */

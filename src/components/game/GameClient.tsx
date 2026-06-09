@@ -52,7 +52,7 @@ export function GameClient({ sportId }: { sportId: string }) {
       </div>
       {mode.daily && dailyInfo?.playedToday ? (
         <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-xs text-white/55">
-          You&apos;ve completed today&apos;s Daily — 🔥 {dailyInfo.streak}-day streak. Replay for fun
+          You&apos;ve completed today&apos;s Daily, 🔥 {dailyInfo.streak}-day streak. Replay for fun
           (it won&apos;t change your streak) or switch to Classic.
         </div>
       ) : null}

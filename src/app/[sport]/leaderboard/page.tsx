@@ -18,7 +18,7 @@ export async function generateMetadata({
   const { sport } = await params;
   const mod = getSport(sport);
   if (!mod) return {};
-  const title = `${mod.config.brand} ${mod.config.name} — Leaderboard`;
+  const title = `${mod.config.brand} ${mod.config.name}, Leaderboard`;
   return { title, description: `Top undefeated runs on ${mod.config.brand} ${mod.config.name}.` };
 }
 

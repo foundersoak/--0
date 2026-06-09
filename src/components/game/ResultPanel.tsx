@@ -108,7 +108,7 @@ export function ResultPanel({
     const grid = shareGrid(result.categories.map((c) => c.passed));
     const dailyTag = mode?.daily ? ` · Daily ${dailyDateFromSeed(state.seed) ?? ""}`.trimEnd() : "";
     const headline = result.perfect
-      ? `${result.wins}-${result.losses} — UNDEFEATED 🏆`
+      ? `${result.wins}-${result.losses}, UNDEFEATED 🏆`
       : `${result.wins}-${result.losses} (${result.grade})`;
     const text = `${config.brand} ${config.name}${dailyTag}\n${headline}\n${grid}\nCan you go ${config.brand}?`;
     try {
@@ -120,7 +120,7 @@ export function ResultPanel({
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
-      /* user dismissed the share sheet — no-op */
+      /* user dismissed the share sheet, no-op */
     }
   };
 
@@ -194,7 +194,7 @@ export function ResultPanel({
           <span className="tabular-nums text-white/55">
             ({missed.raw.toFixed(1)} {missed.statLabel})
           </span>{" "}
-          was on your board — he&apos;d have shored up your {missed.category}.
+          was on your board, he&apos;d have shored up your {missed.category}.
         </div>
       ) : null}
 

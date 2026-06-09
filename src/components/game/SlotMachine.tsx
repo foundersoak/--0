@@ -178,7 +178,7 @@ function SkipButton({
 function SkipsHint({ state }: { state: GameState }) {
   return (
     <div className="text-[11px] text-white/35">
-      Rerolls left — Team {state.teamSkipsLeft} · Era {state.eraSkipsLeft}
+      Rerolls left, Team {state.teamSkipsLeft} · Era {state.eraSkipsLeft}
     </div>
   );
 }

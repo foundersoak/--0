@@ -48,7 +48,7 @@ function write(s: Store): void {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(s));
   } catch {
-    /* quota exceeded / private mode — ignore */
+    /* quota exceeded / private mode, ignore */
   }
 }
 

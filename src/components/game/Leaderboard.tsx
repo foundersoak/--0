@@ -95,13 +95,13 @@ export function Leaderboard({
             </button>
           </div>
           {status === "error" ? (
-            <p className="mt-2 text-xs text-rose-300">Couldn&apos;t submit — try again.</p>
+            <p className="mt-2 text-xs text-rose-300">Couldn&apos;t submit, try again.</p>
           ) : null}
         </div>
       ) : (
         <p className="mb-3 text-sm font-semibold text-emerald-300">
           Posted as {handle || "anon"}
-          {rank?.rank ? ` — #${rank.rank} of ${rank.total}` : ""} ✓
+          {rank?.rank ? `, #${rank.rank} of ${rank.total}` : ""} ✓
         </p>
       )}
 
@@ -115,7 +115,7 @@ export function Leaderboard({
       {entries === null ? (
         <p className="text-xs text-white/30">Loading…</p>
       ) : entries.length === 0 ? (
-        <p className="text-xs text-white/30">No scores yet — be the first.</p>
+        <p className="text-xs text-white/30">No scores yet, be the first.</p>
       ) : (
         <ol className="divide-y divide-white/5 rounded-xl border border-white/10 bg-white/[0.02]">
           {entries.map((e, i) => (

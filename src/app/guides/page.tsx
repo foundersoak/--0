@@ -5,7 +5,7 @@ import { BRAND } from "@/lib/brand";
 import { getCatalogEntry } from "@/sports/registry";
 
 export const metadata: Metadata = {
-  title: "Guides — The Greatest Record Seasons in Sports",
+  title: "Guides, The Greatest Record Seasons in Sports",
   description: `The greatest record-setting seasons in every sport, and the impossible perfect records ${BRAND.name} dares you to beat.`,
   alternates: { canonical: "/guides" },
 };
@@ -16,7 +16,7 @@ export default function GuidesIndex() {
       <div>
         <h1 className="text-3xl font-black text-white sm:text-4xl">Guides</h1>
         <p className="mt-2 max-w-xl text-white/55">
-          The greatest record-setting seasons in sports history — and the impossible perfect records
+          The greatest record-setting seasons in sports history, and the impossible perfect records
           our games dare you to beat.
         </p>
       </div>

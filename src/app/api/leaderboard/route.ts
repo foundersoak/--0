@@ -56,7 +56,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   // Server-side verification: rebuild the lineup and re-simulate so the stored
-  // record is the engine's truth — submitted scores can't be faked.
+  // record is the engine's truth, submitted scores can't be faked.
   const dataset = await mod.load();
   const byId = new Map(dataset.players.map((p) => [p.id, p]));
   const filled: FilledSlot[] = [];

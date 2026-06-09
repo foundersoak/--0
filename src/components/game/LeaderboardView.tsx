@@ -119,7 +119,7 @@ export function LeaderboardView({ sport, accent }: { sport: string; accent: stri
             <p className="text-sm text-white/40">Loading…</p>
           ) : entries.length === 0 ? (
             <p className="text-sm text-white/40">
-              No scores yet — finish a game and submit one to claim the top spot.
+              No scores yet, finish a game and submit one to claim the top spot.
             </p>
           ) : (
             <ol className="divide-y divide-white/5 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02]">
@@ -157,7 +157,7 @@ function PersonalView({ personal }: { personal: Personal | null }) {
   if (!hasBest && personal.recent.length === 0) {
     return (
       <p className="text-sm text-white/40">
-        No runs yet on this device — play a game and your bests, streak, and history show up here.
+        No runs yet on this device, play a game and your bests, streak, and history show up here.
         (Stats are saved in this browser; no account needed.)
       </p>
     );
@@ -179,7 +179,7 @@ function PersonalView({ personal }: { personal: Personal | null }) {
                 ) : null}
               </div>
             ) : (
-              <div className="mt-0.5 text-sm text-white/30">—</div>
+              <div className="mt-0.5 text-sm text-white/30">, </div>
             )}
           </div>
         ))}

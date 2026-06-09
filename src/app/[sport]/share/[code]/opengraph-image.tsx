@@ -4,7 +4,7 @@ import { decodeCard } from "@/lib/share";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${BRAND.name} — roster result`;
+export const alt = `${BRAND.name}, roster result`;
 
 const BG = "#0b0f1a";
 const GOLD = "#FDB927";
@@ -119,7 +119,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", fontSize: 26, color: "rgba(255,255,255,0.5)" }}>
-          {`${BRAND.url.replace(/^https?:\/\//, "")} — can you go ${brand}?`}
+          {`${BRAND.url.replace(/^https?:\/\//, "")}, can you go ${brand}?`}
         </div>
       </div>
     ),

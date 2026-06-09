@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const { code } = await params;
   const card = decodeCard(code);
   if (!card) return { title: "Result" };
-  const title = `${card.wins}-${card.losses} (${card.grade}) — ${card.brand} ${card.name}`;
+  const title = `${card.wins}-${card.losses} (${card.grade}), ${card.brand} ${card.name}`;
   const description = card.perfect
     ? `An undefeated ${card.brand} ${card.name} season. Can you match it?`
     : `I went ${card.wins}-${card.losses} on ${card.brand} ${card.name}. Can you go ${card.brand}?`;

@@ -6,7 +6,7 @@ export interface GameModeDef {
   id: GameModeId;
   label: string;
   blurb: string;
-  /** Hoop IQ conceals the box scores — you draft on knowledge alone. */
+  /** Hoop IQ conceals the box scores, you draft on knowledge alone. */
   hideStats: boolean;
   /** Our improvement on the original: show the team's category progress while drafting. */
   liveMeters: boolean;
@@ -26,7 +26,7 @@ export const GAME_MODES: GameModeDef[] = [
   {
     id: "hoopiq",
     label: "Expert",
-    blurb: "Stats hidden — draft on knowledge",
+    blurb: "Stats hidden, draft on knowledge",
     hideStats: true,
     liveMeters: false,
     daily: false,
@@ -34,7 +34,7 @@ export const GAME_MODES: GameModeDef[] = [
   {
     id: "daily",
     label: "Daily",
-    blurb: "Everyone gets today's board — one shot",
+    blurb: "Everyone gets today's board, one shot",
     hideStats: false,
     liveMeters: true,
     daily: true,
