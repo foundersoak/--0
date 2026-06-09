@@ -17,6 +17,13 @@ export const metadata: Metadata = {
   description: BRAND.description,
   openGraph: { title: BRAND.name, description: BRAND.description, type: "website" },
   twitter: { card: "summary_large_image" },
+  // Search Console "HTML tag" verification. Set GOOGLE_SITE_VERIFICATION in
+  // Vercel to the token from the property's HTML-tag method; this renders a
+  // <meta name="google-site-verification"> into <head> (the location Google
+  // requires), independent of where GA loads.
+  verification: process.env.GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+    : undefined,
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
