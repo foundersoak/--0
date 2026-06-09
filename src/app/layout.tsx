@@ -17,13 +17,18 @@ export const metadata: Metadata = {
   description: BRAND.description,
   openGraph: { title: BRAND.name, description: BRAND.description, type: "website" },
   twitter: { card: "summary_large_image" },
-  // Search Console "HTML tag" verification. Set GOOGLE_SITE_VERIFICATION in
-  // Vercel to the token from the property's HTML-tag method; this renders a
-  // <meta name="google-site-verification"> into <head> (the location Google
-  // requires), independent of where GA loads.
-  verification: process.env.GOOGLE_SITE_VERIFICATION
-    ? { google: process.env.GOOGLE_SITE_VERIFICATION }
-    : undefined,
+  // Ownership verification meta tags, rendered server-side into <head> (where
+  // Google's verifiers look). GOOGLE_SITE_VERIFICATION = the Search Console
+  // HTML-tag token; the AdSense account meta lets AdSense verify via its "Meta
+  // tag" method without depending on where the ad script loads.
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.NEXT_PUBLIC_ADSENSE_CLIENT
+      ? { other: { "google-adsense-account": process.env.NEXT_PUBLIC_ADSENSE_CLIENT } }
+      : {}),
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

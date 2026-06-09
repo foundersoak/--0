@@ -11,10 +11,14 @@ export function SiteScripts() {
   return (
     <>
       {adsense ? (
-        <Script
+        // Plain async <script> (not next/script) so React hoists the real tag
+        // into <head>, where AdSense expects it for site verification and ad
+        // serving. next/script afterInteractive only emits a <link rel=preload>
+        // in <head> and injects the script into <body>, which the AdSense
+        // verifier does not accept.
+        <script
           async
           crossOrigin="anonymous"
-          strategy="afterInteractive"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsense}`}
         />
       ) : null}
