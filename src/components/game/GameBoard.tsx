@@ -3,7 +3,9 @@ import { randomSeed, roundsOf } from "@/engine";
 import type { PlayerDataset, SportConfig } from "@/engine/types";
 import { AdSlot } from "@/components/ads/AdSlot";
 import { useGame } from "@/lib/useGame";
+import type { GameModeDef } from "@/lib/modes";
 import { CandidateList } from "./CandidateList";
+import { LiveMeters } from "./LiveMeters";
 import { ResultPanel } from "./ResultPanel";
 import { RosterBoard } from "./RosterBoard";
 import { SlotMachine } from "./SlotMachine";
@@ -12,10 +14,14 @@ export function GameBoard({
   config,
   dataset,
   seed,
+  mode,
+  accent,
 }: {
   config: SportConfig;
   dataset: PlayerDataset;
   seed: string;
+  mode: GameModeDef;
+  accent: string;
 }) {
   const { engine, state, dispatch } = useGame(config, dataset, seed);
   const complete = state.phase === "complete";
@@ -37,7 +43,10 @@ export function GameBoard({
           <ResultPanel
             config={config}
             state={state}
-            onPlayAgain={() => dispatch({ type: "RESET", seed: randomSeed() })}
+            mode={mode}
+            onPlayAgain={() =>
+              dispatch({ type: "RESET", seed: mode.daily ? state.seed : randomSeed() })
+            }
           />
         ) : (
           <>
@@ -48,10 +57,12 @@ export function GameBoard({
               onSkipTeam={() => dispatch({ type: "SKIP_TEAM" })}
               onSkipEra={() => dispatch({ type: "SKIP_ERA" })}
             />
+            {mode.liveMeters ? <LiveMeters engine={engine} state={state} accent={accent} /> : null}
             <CandidateList
               config={config}
               state={state}
               engine={engine}
+              hideStats={mode.hideStats}
               onPick={(playerId, slotId) => dispatch({ type: "PICK", playerId, slotId })}
             />
           </>

@@ -9,11 +9,13 @@ export function CandidateList({
   state,
   engine,
   onPick,
+  hideStats = false,
 }: {
   config: SportConfig;
   state: GameState;
   engine: Engine;
   onPick: (playerId: string, slotId: string) => void;
+  hideStats?: boolean;
 }) {
   const [pending, setPending] = useState<PlayerEntry | null>(null);
 
@@ -36,7 +38,7 @@ export function CandidateList({
         <span className="text-xs font-semibold uppercase tracking-wide text-white/40">
           {state.spin.candidates.length} players · pick one
         </span>
-        <span className="text-[11px] text-white/30">best first</span>
+        <span className="text-[11px] text-white/30">{hideStats ? "stats hidden" : "best first"}</span>
       </div>
       <div className="grid max-h-[58vh] grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
         {state.spin.candidates.map((player) => (
@@ -46,6 +48,7 @@ export function CandidateList({
             player={player}
             onClick={() => select(player)}
             selected={pending?.id === player.id}
+            hideStats={hideStats}
           />
         ))}
       </div>

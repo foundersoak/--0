@@ -3,17 +3,20 @@ import { useState } from "react";
 import { motion } from "motion/react";
 import type { CategoryResult, GameState } from "@/engine";
 import type { SportConfig } from "@/engine/types";
-import { encodeShare } from "@/lib/share";
+import type { GameModeDef } from "@/lib/modes";
+import { dailyDateFromSeed, encodeShare, shareGrid } from "@/lib/share";
 import { RosterBoard } from "./RosterBoard";
 
 export function ResultPanel({
   config,
   state,
   onPlayAgain,
+  mode,
 }: {
   config: SportConfig;
   state: GameState;
   onPlayAgain: () => void;
+  mode?: GameModeDef;
 }) {
   const [copied, setCopied] = useState(false);
   const result = state.result;
@@ -28,13 +31,18 @@ export function ResultPanel({
       typeof window !== "undefined"
         ? `${window.location.origin}/${config.id}?r=${encodeURIComponent(code)}`
         : "";
-    const text = `I went ${result.wins}-${result.losses} (${result.grade}) on ${config.brand} ${config.name}. Can you go ${config.brand}?`;
+    const grid = shareGrid(result.categories.map((c) => c.passed));
+    const dailyTag = mode?.daily ? ` · Daily ${dailyDateFromSeed(state.seed) ?? ""}`.trimEnd() : "";
+    const headline = result.perfect
+      ? `${result.wins}-${result.losses} — UNDEFEATED 🏆`
+      : `${result.wins}-${result.losses} (${result.grade})`;
+    const text = `${config.brand} ${config.name}${dailyTag}\n${headline}\n${grid}\nCan you go ${config.brand}?`;
     try {
       if (navigator.share) {
         await navigator.share({ title: `${config.brand} ${config.name}`, text, url });
         return;
       }
-      await navigator.clipboard.writeText(`${text} ${url}`);
+      await navigator.clipboard.writeText(`${text}\n${url}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -50,6 +58,11 @@ export function ResultPanel({
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
         className="flex flex-col items-center"
       >
+        {mode?.daily ? (
+          <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/40">
+            Daily · {dailyDateFromSeed(state.seed)}
+          </div>
+        ) : null}
         {result.perfect ? (
           <div className="mb-1 rounded-full bg-amber-400 px-4 py-1 text-xs font-black uppercase tracking-[0.2em] text-black">
             Undefeated
