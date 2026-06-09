@@ -7,6 +7,13 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Monetization & SEO wiring (AdSense-ready, traffic-driven)
+- `SiteScripts`: AdSense loader + GA4, each gated on env (`NEXT_PUBLIC_ADSENSE_CLIENT` /
+  `NEXT_PUBLIC_GA4_ID`) — setting the AdSense client both verifies the site and enables Auto ads.
+- `/ads.txt` (derived from the AdSense client), `/robots.txt`, `/sitemap.xml`, and a `/terms` page.
+- `BRAND.url` (SITE_URL) now drives `metadataBase` + sitemap + robots; footer links Terms.
+- Deliberately **no email gating** — this is a traffic/ad-driven game, not a lead-capture site.
+
 ### Contact form (no email shown anywhere)
 - Replaced the displayed contact email with a minimal **contact form** (`ContactForm` + `/api/contact`)
   that delivers via **Resend** or **Formspree** (whichever env vars are set) — the destination inbox
