@@ -7,6 +7,12 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Browsable leaderboard page
+- New **`/[sport]/leaderboard`** page (`LeaderboardView`) with mode tabs (Casual/Expert/Daily) so
+  anyone can check standings without finishing a game. Added a **Leaderboard** nav link to the game
+  header and a "View full leaderboard →" link on the result screen. Previously the board only
+  appeared post-game, so it was undiscoverable.
+
 ### Visual polish + UX feedback
 - **Slot-machine reel**: spinning now flashes random franchises and decelerates onto your draw
   (`SlotReel`); pulsing ring + bigger Spin button.
