@@ -2,10 +2,10 @@
 
 A viral-style, multi-sport **roster-building game**. Spin a random franchise and era,
 draft real legends into your lineup, and find out if your all-time team can go **undefeated**.
-Inspired by [82-0.com](https://82-0.com) — one hub, every major league.
+Inspired by [82-0.com](https://82-0.com), one hub, every major league.
 
-- **NBA — 82‑0** — live and deep (8,000+ players, real per-team/decade rosters).
-- **NFL 17‑0 · MLB 162‑0 · NHL 82‑0 · CFB 12‑0 · EPL 38‑0** — coming soon (same engine, per-sport data).
+- **NBA, 82‑0**, live and deep (8,000+ players, real per-team/decade rosters).
+- **NFL 17‑0 · MLB 162‑0 · NHL 82‑0 · CFB 12‑0 · EPL 38‑0**, coming soon (same engine, per-sport data).
 
 ## Quick start
 
@@ -36,11 +36,11 @@ Each round a slot machine assigns a random **franchise + decade**; you pick one 
 slot him at a position he actually played. You get one team reroll and one era reroll. When the
 lineup is full, its stats run through a season simulation:
 
-- **Era adjustment** — pace-inflated old-era numbers are deflated, so a 1960s 30 PPG ≈ a 2000s 25.
-- **Per-category gating** — every category (scoring, rebounding, playmaking, steals, rim protection)
+- **Era adjustment**, pace-inflated old-era numbers are deflated, so a 1960s 30 PPG ≈ a 2000s 25.
+- **Per-category gating**, every category (scoring, rebounding, playmaking, steals, rim protection)
   has a floor. One glaring weakness **caps your record** no matter how huge the rest is. This is the
   addictive part.
-- **Non-linear win curve** — a stacked, balanced all-time lineup goes 82‑0; good lineups land
+- **Non-linear win curve**, a stacked, balanced all-time lineup goes 82‑0; good lineups land
   mid-pack; one-dimensional rosters get gated.
 
 ## Architecture

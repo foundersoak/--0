@@ -1,7 +1,7 @@
 /**
  * Tiny seedable PRNG so spins are deterministic: the same seed produces the same
  * sequence of (team, era) draws. This is what makes shareable boards and the
- * daily challenge free — encode the seed, replay the exact game.
+ * daily challenge free, encode the seed, replay the exact game.
  */
 
 /** Hash a string into a 32-bit integer seed (xfnv1a). */

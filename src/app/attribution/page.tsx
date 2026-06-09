@@ -11,17 +11,17 @@ const NBA_SOURCES = [
   {
     href: "https://github.com/peasant98/TheNBACSV",
     label: "peasant98/TheNBACSV",
-    note: 'Kaggle "NBA Seasons Stats" (1950–2017)',
+    note: 'Kaggle "NBA Seasons Stats" (1950-2017)',
   },
   {
     href: "https://github.com/Brescou/NBA-dataset-stats-player-team",
     label: "Brescou/NBA-dataset-stats-player-team",
-    note: "per-game season stats (1996–2023)",
+    note: "per-game season stats (1996-2023)",
   },
   {
     href: "https://github.com/NocturneBear/NBA-Data-2010-2024",
     label: "NocturneBear/NBA-Data-2010-2024",
-    note: "recent box scores (2010–2024)",
+    note: "recent box scores (2010-2024)",
   },
 ];
 
@@ -65,14 +65,14 @@ export default function AttributionPage() {
                 className="underline hover:text-white"
               >
                 {s.label}
-              </a>{" "}
-              — {s.note}.
+              </a>
+              , {s.note}.
             </li>
           ))}
         </ul>
         <p className="text-xs leading-relaxed text-white/40">
           Pre-1974 steals/blocks are imputed (they weren&apos;t tracked then). Other leagues will be
-          added with their own attributed open sources — Lahman for MLB, nflverse for NFL, MoneyPuck
+          added with their own attributed open sources, Lahman for MLB, nflverse for NFL, MoneyPuck
           for NHL, StatsBomb for soccer. CC BY-SA-derived data, where used, is kept in clearly marked
           files and shared under the same license.
         </p>

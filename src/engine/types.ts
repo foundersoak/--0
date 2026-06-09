@@ -1,6 +1,6 @@
 /**
  * The generic contract that every sport plugs into. The engine and UI depend
- * ONLY on these types — they know nothing about basketball, football, etc.
+ * ONLY on these types, they know nothing about basketball, football, etc.
  * A "sport" is just a {@link SportConfig} object + a {@link PlayerDataset}.
  */
 

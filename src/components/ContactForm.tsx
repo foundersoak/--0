@@ -35,7 +35,7 @@ export function ContactForm() {
   };
 
   if (status === "sent") {
-    return <p className="text-sm font-semibold text-emerald-300">Thanks — your message is on its way. ✓</p>;
+    return <p className="text-sm font-semibold text-emerald-300">Thanks, your message is on its way. ✓</p>;
   }
 
   const field =

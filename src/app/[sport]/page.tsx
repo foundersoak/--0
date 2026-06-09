@@ -19,7 +19,7 @@ export async function generateMetadata({
   const mod = getSport(sport);
   if (!mod) return {};
   const c = mod.config;
-  const title = `${c.brand} — ${c.name} Roster Game`;
+  const title = `${c.brand}, ${c.name} Roster Game`;
   return {
     title,
     description: c.tagline,
@@ -43,7 +43,7 @@ export default async function SportPage({ params }: { params: Promise<{ sport: s
             {c.brand}
           </div>
           <h1 className="mt-1 text-lg font-semibold text-white">
-            {c.name} <span className="font-normal text-white/55">— {c.tagline}</span>
+            {c.name} <span className="font-normal text-white/55">,  {c.tagline}</span>
           </h1>
         </div>
         <div className="flex gap-2">

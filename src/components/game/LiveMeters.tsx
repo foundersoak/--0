@@ -2,7 +2,7 @@
 import type { Engine, GameState } from "@/engine";
 
 /**
- * Live category meters — our improvement over the original, which hides your
+ * Live category meters, our improvement over the original, which hides your
  * progress and only reveals the damage at the end. Reuses the real scoring math
  * (`simulate` is partial-aware) so you watch each floor turn green as you draft.
  */
