@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { eraAdjustStats, type CategoryResult, type GameState } from "@/engine";
 import type { PlayerEntry, SportConfig } from "@/engine/types";
 import type { GameModeDef } from "@/lib/modes";
-import { dailyDateFromSeed, encodeShare, shareGrid } from "@/lib/share";
+import { dailyDateFromSeed, encodeCard, shareGrid, type ShareCard } from "@/lib/share";
 import { recordResult, type RecordOutcome } from "@/lib/store";
 import { RosterBoard } from "./RosterBoard";
 import { RunHistory } from "./RunHistory";
@@ -83,13 +83,24 @@ export function ResultPanel({
   if (!result) return null;
 
   const share = async () => {
-    const ordered = config.positions.map(
-      (slot) => state.filled.find((f) => f.slotId === slot.id)?.player.id ?? "",
-    );
-    const code = encodeShare(config.id, state.seed, ordered);
+    const card: ShareCard = {
+      sport: config.id,
+      brand: config.brand,
+      name: config.name,
+      wins: result.wins,
+      losses: result.losses,
+      grade: result.grade,
+      perfect: result.perfect,
+      passes: result.categories.map((c) => c.passed),
+      roster: config.positions.map((slot) => ({
+        slot: slot.abbr,
+        player: state.filled.find((f) => f.slotId === slot.id)?.player.name ?? "",
+      })),
+      seed: state.seed,
+    };
     const url =
       typeof window !== "undefined"
-        ? `${window.location.origin}/${config.id}?r=${encodeURIComponent(code)}`
+        ? `${window.location.origin}/${config.id}/share/${encodeCard(card)}`
         : "";
     const grid = shareGrid(result.categories.map((c) => c.passed));
     const dailyTag = mode?.daily ? ` · Daily ${dailyDateFromSeed(state.seed) ?? ""}`.trimEnd() : "";

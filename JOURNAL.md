@@ -7,6 +7,16 @@ commit it landed in. This file is updated as part of every change going forward.
 
 ## 2026-06-09
 
+### Branding → blankand0 + dynamic OG share cards
+- Rebranded the hub to **blankand0** (`lib/brand.ts`, `metadataBase` → https://blankand0.vercel.app)
+  to match the live Vercel deploy.
+- **Self-contained share cards**: a finished result encodes into a URL-safe base64 card
+  (`encodeCard`/`decodeCard` in `lib/share.ts`), so a new `/[sport]/share/[code]` page + a `next/og`
+  `opengraph-image` render a rich **1200×630 PNG** (record, grade, green/red category pattern, full
+  roster) with **no dataset load** at request time.
+- Verified end-to-end against the production server: OG route returns `200 image/png` (53KB, valid
+  PNG), and the share page emits `og:image` / `og:title` / `twitter:card` pointing at the absolute URL.
+
 ### "One that got away" + Undo (post-game polish, both improvements on the original)
 - After a non-perfect game, `ResultPanel` replays your passed-over candidates (tracked in
   `GameBoard`) to name the best player you skipped for your weakest/capped category — e.g. capped by
