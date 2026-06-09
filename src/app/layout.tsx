@@ -44,6 +44,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <footer className="border-t border-white/10">
           <div className="mx-auto max-w-6xl px-4 py-6 text-xs leading-relaxed text-white/35">
             <div className="mb-2 flex flex-wrap gap-x-4 gap-y-1 font-semibold">
+              <Link href="/guides" className="transition hover:text-white/70">
+                Guides
+              </Link>
               <Link href="/attribution" className="transition hover:text-white/70">
                 Attribution &amp; legal
               </Link>
