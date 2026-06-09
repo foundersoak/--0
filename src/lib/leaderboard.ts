@@ -16,6 +16,8 @@ export interface BoardEntry {
   at: number;
 }
 
+export type Period = "all" | "month" | "week" | "day";
+
 const REST_URL = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
 const REST_TOKEN = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
 const REDIS_URL = process.env.REDIS_URL ?? process.env.KV_URL;
@@ -51,27 +53,71 @@ const mem = new Map<string, BoardEntry[]>();
 
 const scoreOf = (e: BoardEntry): number => e.wins * 100000 + (e.perfect ? 50000 : 0) - e.losses;
 
-export function boardKey(sport: string, mode: string, date?: string | null): string {
-  return `lb:${sport}:${mode}${date ? `:${date}` : ""}`;
+// ---- board keys ----
+function ymd(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+function ym(d: Date): string {
+  return d.toISOString().slice(0, 7);
+}
+function isoWeek(d: Date): string {
+  const date = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const day = (date.getUTCDay() + 6) % 7; // Mon=0 … Sun=6
+  date.setUTCDate(date.getUTCDate() - day + 3); // Thursday of this week
+  const firstThursday = new Date(Date.UTC(date.getUTCFullYear(), 0, 4));
+  const fdDay = (firstThursday.getUTCDay() + 6) % 7;
+  firstThursday.setUTCDate(firstThursday.getUTCDate() - fdDay + 3);
+  const week = 1 + Math.round((date.getTime() - firstThursday.getTime()) / (7 * 86400000));
+  return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
 }
 
-const isDailyKey = (key: string): boolean => /\d{4}-\d{2}-\d{2}$/.test(key);
-const DAILY_TTL = 60 * 60 * 24 * 45; // dailies expire after ~45 days
+const DAY = 60 * 60 * 24;
 
-export async function submitScore(key: string, entry: BoardEntry): Promise<void> {
+/** The single board to read for a (mode, period) view. */
+export function boardKeyForView(
+  sport: string,
+  mode: string,
+  period: Period,
+  dailyDate?: string | null,
+): string {
+  if (mode === "daily") return `lb:${sport}:daily:${dailyDate ?? ymd(new Date())}`;
+  const now = new Date();
+  if (period === "month") return `lb:${sport}:${mode}:m:${ym(now)}`;
+  if (period === "week") return `lb:${sport}:${mode}:w:${isoWeek(now)}`;
+  return `lb:${sport}:${mode}`; // all-time
+}
+
+/** Every board a submission should be written to, with optional TTLs. */
+export function boardKeysForSubmit(
+  sport: string,
+  mode: string,
+  dailyDate?: string | null,
+): { key: string; ttl?: number }[] {
+  if (mode === "daily") {
+    return [{ key: `lb:${sport}:daily:${dailyDate ?? ymd(new Date())}`, ttl: 45 * DAY }];
+  }
+  const now = new Date();
+  return [
+    { key: `lb:${sport}:${mode}` }, // all-time (no expiry)
+    { key: `lb:${sport}:${mode}:m:${ym(now)}`, ttl: 70 * DAY }, // monthly
+    { key: `lb:${sport}:${mode}:w:${isoWeek(now)}`, ttl: 21 * DAY }, // weekly
+  ];
+}
+
+export async function submitScore(key: string, entry: BoardEntry, ttl?: number): Promise<void> {
   const member = JSON.stringify(entry);
   const score = scoreOf(entry);
   if (backend === "rest") {
     await rest(["ZADD", key, score, member]);
     await rest(["ZREMRANGEBYRANK", key, 0, -101]); // keep only the top 100
-    if (isDailyKey(key)) await rest(["EXPIRE", key, DAILY_TTL]);
+    if (ttl) await rest(["EXPIRE", key, ttl]);
     return;
   }
   if (backend === "redis") {
     const r = await redis();
     await r.zadd(key, score, member);
     await r.zremrangebyrank(key, 0, -101);
-    if (isDailyKey(key)) await r.expire(key, DAILY_TTL);
+    if (ttl) await r.expire(key, ttl);
     return;
   }
   const arr = mem.get(key) ?? [];
@@ -93,5 +139,31 @@ export async function topScores(key: string, n = 20): Promise<BoardEntry[]> {
     return raw.map((s) => JSON.parse(s) as BoardEntry);
   } catch {
     return []; // never break the board on a read error
+  }
+}
+
+/** 1-based rank of an entry within a board, plus the board size. */
+export async function rankAndTotal(
+  key: string,
+  entry: BoardEntry,
+): Promise<{ rank: number | null; total: number }> {
+  const member = JSON.stringify(entry);
+  try {
+    if (backend === "rest") {
+      const rank = await rest<number | null>(["ZREVRANK", key, member]);
+      const total = await rest<number>(["ZCARD", key]);
+      return { rank: rank === null ? null : rank + 1, total };
+    }
+    if (backend === "redis") {
+      const r = await redis();
+      const rank = await r.zrevrank(key, member);
+      const total = await r.zcard(key);
+      return { rank: rank === null ? null : rank + 1, total };
+    }
+    const arr = mem.get(key) ?? [];
+    const idx = arr.findIndex((e) => JSON.stringify(e) === member);
+    return { rank: idx >= 0 ? idx + 1 : null, total: arr.length };
+  } catch {
+    return { rank: null, total: 0 };
   }
 }

@@ -25,10 +25,11 @@ export function Leaderboard({
   });
   const [entries, setEntries] = useState<BoardEntry[] | null>(null);
   const [status, setStatus] = useState<Status>("idle");
+  const [rank, setRank] = useState<{ rank: number | null; total: number } | null>(null);
 
   const load = useCallback(async () => {
     try {
-      const qs = new URLSearchParams({ sport, mode });
+      const qs = new URLSearchParams({ sport, mode, limit: "10" });
       if (date) qs.set("date", date);
       const r = await fetch(`/api/leaderboard?${qs.toString()}`, { cache: "no-store" });
       const j = (await r.json()) as { entries?: BoardEntry[] };
@@ -57,6 +58,8 @@ export function Leaderboard({
         body: JSON.stringify({ sport, mode, date, handle: handle || "anon", playerIds }),
       });
       if (!r.ok) throw new Error("submit failed");
+      const j = (await r.json()) as { rank?: number | null; total?: number };
+      setRank({ rank: j.rank ?? null, total: j.total ?? 0 });
       setStatus("done");
       await load();
     } catch {
@@ -96,7 +99,10 @@ export function Leaderboard({
           ) : null}
         </div>
       ) : (
-        <p className="mb-3 text-sm font-semibold text-emerald-300">Posted as {handle || "anon"} ✓</p>
+        <p className="mb-3 text-sm font-semibold text-emerald-300">
+          Posted as {handle || "anon"}
+          {rank?.rank ? ` — #${rank.rank} of ${rank.total}` : ""} ✓
+        </p>
       )}
 
       <div className="mb-2 flex items-baseline justify-between">
