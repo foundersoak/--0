@@ -112,14 +112,33 @@ const slugify = (s: string): string =>
 
 /** Map a raw position string (fine "SF-PF" or coarse "G"/"F-C") to slot tags. */
 function positionTags(pos: string): string[] {
-  const tags = new Set<string>();
-  for (const tok of pos.split(/[-/]/).map((t) => t.trim().toUpperCase())) {
-    if (tok === "PG" || tok === "SG" || tok === "SF" || tok === "PF" || tok === "C") tags.add(tok);
-    else if (tok === "G") { tags.add("PG"); tags.add("SG"); }
-    else if (tok === "F") { tags.add("SF"); tags.add("PF"); }
-  }
-  return [...tags];
+  const toks = pos.split(/[-/]/).map((t) => t.trim().toUpperCase()).filter(Boolean);
+  // Prefer explicit fine positions when the source provides them.
+  const fine = toks.filter((t) => ["PG", "SG", "SF", "PF", "C"].includes(t));
+  if (fine.length) return [...new Set(fine)];
+  // Otherwise interpret coarse G/F/C combinations semantically (a center is not
+  // a small forward; a guard-forward is a wing, not a point guard or power forward).
+  const has = (x: string) => toks.includes(x);
+  const out = new Set<string>();
+  if (has("G") && has("F")) { out.add("SG"); out.add("SF"); } // wing
+  else if (has("F") && has("C")) { out.add("PF"); out.add("C"); } // frontcourt big
+  else if (has("G") && has("C")) { out.add("PF"); out.add("C"); } // rare; treat as big
+  else if (has("G")) { out.add("PG"); out.add("SG"); }
+  else if (has("F")) { out.add("SF"); out.add("PF"); }
+  else if (has("C")) { out.add("C"); }
+  return [...out];
 }
+
+// The historical source truncates some 3-word names; correct the recognizable ones.
+const NAME_FIX: Record<string, string> = {
+  "Metta World": "Metta World Peace",
+  "Joe Barry": "Joe Barry Carroll",
+  "Nick Van": "Nick Van Exel",
+  "Michael Ray": "Michael Ray Richardson",
+  "World B": "World B. Free",
+  "Billy Ray": "Billy Ray Bates",
+};
+const fixName = (n: string): string => NAME_FIX[n] ?? n;
 
 interface Bucket {
   name: string;
@@ -265,8 +284,9 @@ async function main() {
     const tags = positionTags(b.pos);
     if (tags.length === 0) continue;
     const big = tags.includes("C") || tags.includes("PF");
-    // Steals/blocks untracked before 1973-74: impute modest era-typical values.
-    if (b.era === "1960s") {
+    // Steals/blocks untracked before 1973-74: impute modest era-typical values
+    // for the 1960s and early-1970s players whose tracked value is exactly zero.
+    if (b.era === "1960s" || b.era === "1970s") {
       if (spg < 0.05) spg = big ? 0.6 : 1.0;
       if (bpg < 0.05) bpg = big ? 1.2 : 0.3;
     }
@@ -274,7 +294,7 @@ async function main() {
     const stats = { ppg: round(ppg), rpg: round(rpg), apg: round(apg), spg: round(spg), bpg: round(bpg) };
     const rating = ppg + 1.2 * rpg + 1.5 * apg + 3 * spg + 3 * bpg;
     finalized.push({
-      id: "", name: b.name, team: b.team, era: b.era, positions: tags, stats, rating, g: b.g,
+      id: "", name: fixName(b.name), team: b.team, era: b.era, positions: tags, stats, rating, g: b.g,
     });
   }
 
