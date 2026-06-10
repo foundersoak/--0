@@ -23,7 +23,10 @@ const CACHE = join(ROOT, "scripts", "etl", ".cache");
 const OUT = join(ROOT, "src", "sports", "mlb", "data.json");
 const OUT_FR = join(ROOT, "src", "sports", "mlb", "franchises.generated.ts");
 
-const BASE = "https://raw.githubusercontent.com/chadwickbureau/baseballdatabank/master/core";
+// Lahman / Baseball Databank core CSVs. The original chadwickbureau repo was
+// taken down; xorq-labs/baseballdatabank is a live mirror of the same data
+// (1871-2021) at the same paths. cbwinslow/baseballdatabank is a fallback.
+const BASE = "https://raw.githubusercontent.com/xorq-labs/baseballdatabank/master/core";
 const SRC = {
   batting: `${BASE}/Batting.csv`,
   pitching: `${BASE}/Pitching.csv`,
@@ -306,7 +309,7 @@ async function main() {
       sport: "mlb",
       version: `etl-${new Date().toISOString().slice(0, 10)}`,
       source:
-        "Baseball Databank (Lahman), CC BY-SA 3.0 — chadwickbureau/baseballdatabank. Peak-decade rate stats + per-season counting stats.",
+        "Baseball Databank (Lahman), CC BY-SA 3.0, via the xorq-labs/baseballdatabank mirror. Peak-decade rate stats + per-season counting stats.",
       players,
     }),
   );
