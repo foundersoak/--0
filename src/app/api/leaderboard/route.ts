@@ -66,8 +66,13 @@ export async function POST(req: Request): Promise<Response> {
     filled.push({ slotId: cfg.positions[i].id, player });
   }
   if (cfg.requireEraDiversity) {
+    // The engine draws distinct eras until it runs out: when there are more
+    // roster slots than eras (MLB's 13 slots over 12 decades) one era must
+    // repeat, so require as many distinct eras as the engine would force, not
+    // strictly one per slot.
     const eras = new Set(filled.map((f) => f.player.era));
-    if (eras.size !== filled.length) {
+    const needed = Math.min(filled.length, cfg.eras.length);
+    if (eras.size < needed) {
       return NextResponse.json({ error: "era diversity required" }, { status: 400 });
     }
   }
