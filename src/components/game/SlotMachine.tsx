@@ -123,8 +123,12 @@ function SlotReel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [spinKey]);
 
+  const len = face.name.length;
+  const nameSize =
+    len > 22 ? "text-base sm:text-lg" : len > 14 ? "text-lg sm:text-2xl" : "text-2xl sm:text-3xl";
+
   return (
-    <div className="flex h-[64px] items-center justify-center overflow-hidden">
+    <div className="flex h-[78px] items-center justify-center overflow-hidden">
       <motion.div
         key={step}
         initial={{ y: spinning ? 26 : 12, opacity: 0 }}
@@ -140,7 +144,7 @@ function SlotReel({
           {face.era}
         </span>
         <span
-          className="mt-1 text-center text-2xl font-black leading-tight sm:text-3xl"
+          className={`mt-1 max-w-[17rem] text-balance text-center font-black leading-tight ${nameSize}`}
           style={{ color: face.color }}
         >
           {face.name}
