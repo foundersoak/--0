@@ -46,7 +46,7 @@ const nbaConfig: SportConfig = {
     "Spin a random franchise and decade, draft one legend at a position he played, fill all five spots, and find out if your lineup goes undefeated.",
   seasonGames: 82,
   requireEraDiversity: true,
-  skips: { team: 1, era: 1 },
+  rerolls: 2,
   positions: [
     { id: "PG", label: "Point Guard", abbr: "PG", accepts: ["PG"] },
     { id: "SG", label: "Shooting Guard", abbr: "SG", accepts: ["SG"] },

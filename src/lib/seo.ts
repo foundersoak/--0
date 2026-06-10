@@ -109,7 +109,7 @@ export function faqsFor(c: SportConfig): QA[] {
     },
     {
       q: `How many rerolls do I get?`,
-      a: `You get ${c.skips.team} team reroll and ${c.skips.era} era reroll per game. Spend them when a spin gives you a franchise or era you cannot use, because once they are gone you have to draft from whatever you are dealt.`,
+      a: `You get ${c.rerolls} rerolls per game. Each one swaps the current spin for a fresh team and era, so spend them when a spin gives you a franchise you cannot use, because once they are gone you have to draft from whatever you are dealt.`,
     },
     {
       q: `Can I share my result or play a daily challenge?`,

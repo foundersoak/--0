@@ -12,7 +12,7 @@ const mlbConfig: SportConfig = {
   requireEraDiversity: true,
   // 13 roster spots, 12 decades: the first dozen draws are distinct decades and
   // the last reuses one (the engine relaxes diversity when it would block a draw).
-  skips: { team: 1, era: 1 },
+  rerolls: 2,
   positions: [
     { id: "C", label: "Catcher", abbr: "C", accepts: ["C"], group: "Lineup" },
     { id: "1B", label: "First Base", abbr: "1B", accepts: ["1B"], group: "Lineup" },
@@ -112,6 +112,10 @@ const mlbConfig: SportConfig = {
     curve: { midpoint: 0.78, steepness: 14, maxWinFraction: 1.0 },
     perfectThreshold: 0.96,
   },
+  candidateFilters: [
+    { label: "Hitters", positions: ["C", "1B", "2B", "3B", "SS", "LF", "CF", "RF", "DH"] },
+    { label: "Pitchers", positions: ["SP", "CL"] },
+  ],
   theme: { primary: "#002D72", accent: "#E4002C", bg: "#0b0f1a" },
 };
 

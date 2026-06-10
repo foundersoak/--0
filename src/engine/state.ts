@@ -1,5 +1,5 @@
 /**
- * The game state machine: rounds, spins, skips, and roster filling. A pure
+ * The game state machine: rounds, spins, rerolls, and roster filling. A pure
  * reducer so it's fully testable in Node and deterministic given a seed + the
  * sequence of actions.
  */
@@ -21,17 +21,15 @@ export interface GameState {
   phase: Phase;
   spin: Spin | null;
   filled: FilledSlot[];
-  teamSkipsLeft: number;
-  eraSkipsLeft: number;
+  rerollsLeft: number;
   usedTeamEras: string[]; // `${team}::${era}` keys already drawn
-  draws: number; // count of spins+skips, drives the deterministic RNG stream
+  draws: number; // count of spins+rerolls, drives the deterministic RNG stream
   result: SeasonResult | null;
 }
 
 export type GameAction =
   | { type: "SPIN" }
-  | { type: "SKIP_TEAM" }
-  | { type: "SKIP_ERA" }
+  | { type: "REROLL" }
   | { type: "PICK"; playerId: string; slotId: string }
   | { type: "UNDO" }
   | { type: "RESET"; seed?: string };
@@ -138,8 +136,7 @@ export function createInitialState(config: SportConfig, seed: string): GameState
     phase: "ready",
     spin: null,
     filled: [],
-    teamSkipsLeft: config.skips.team,
-    eraSkipsLeft: config.skips.era,
+    rerollsLeft: config.rerolls,
     usedTeamEras: [],
     draws: 0,
     result: null,
@@ -156,20 +153,14 @@ export function makeReducer(config: SportConfig, index: DataIndex) {
         const spin = drawSpin(config, index, rng, state, {});
         return { ...state, spin, phase: "choosing", draws: state.draws + 1 };
       }
-      case "SKIP_TEAM": {
-        if (!state.spin || state.teamSkipsLeft <= 0) return state;
+      case "REROLL": {
+        // One general reroll: redraw a fresh spin. Excluding the current team
+        // guarantees a visibly different franchise (era follows the diversity
+        // rules), rather than quietly changing only one dimension.
+        if (!state.spin || state.rerollsLeft <= 0) return state;
         const rng = rngFor(state.seed, state.draws);
-        const spin = drawSpin(config, index, rng, state, {
-          sameEra: state.spin.era,
-          excludeTeam: state.spin.team,
-        });
-        return { ...state, spin, teamSkipsLeft: state.teamSkipsLeft - 1, draws: state.draws + 1 };
-      }
-      case "SKIP_ERA": {
-        if (!state.spin || state.eraSkipsLeft <= 0) return state;
-        const rng = rngFor(state.seed, state.draws);
-        const spin = drawSpin(config, index, rng, state, { excludeEra: state.spin.era });
-        return { ...state, spin, eraSkipsLeft: state.eraSkipsLeft - 1, draws: state.draws + 1 };
+        const spin = drawSpin(config, index, rng, state, { excludeTeam: state.spin.team });
+        return { ...state, spin, rerollsLeft: state.rerollsLeft - 1, draws: state.draws + 1 };
       }
       case "PICK": {
         if (!state.spin || state.phase !== "choosing") return state;
