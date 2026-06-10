@@ -18,8 +18,17 @@ export function CandidateList({
   hideStats?: boolean;
 }) {
   const [pending, setPending] = useState<PlayerEntry | null>(null);
+  const [filter, setFilter] = useState<string | null>(null);
 
   if (state.phase !== "choosing" || !state.spin) return null;
+
+  const candidates = state.spin.candidates;
+  const matches = (p: PlayerEntry, positions: string[]) => p.positions.some((x) => positions.includes(x));
+  // Only the filters that actually appear among this spin's candidates.
+  const present = (config.candidateFilters ?? []).filter((f) => candidates.some((p) => matches(p, f.positions)));
+  const showFilters = present.length >= 2;
+  const active = showFilters && filter ? (present.find((f) => f.label === filter) ?? null) : null;
+  const shown = active ? candidates.filter((p) => matches(p, active.positions)) : candidates;
 
   const select = (player: PlayerEntry) => {
     const slots = engine.eligibleSlots(state, player);
@@ -36,12 +45,35 @@ export function CandidateList({
     <div>
       <div className="mb-2 flex items-baseline justify-between">
         <span className="text-xs font-semibold uppercase tracking-wide text-white/40">
-          {state.spin.candidates.length} players · pick one
+          {shown.length} {shown.length === 1 ? "player" : "players"} · pick one
         </span>
         <span className="text-[11px] text-white/30">{hideStats ? "stats hidden" : "best first"}</span>
       </div>
+
+      {showFilters ? (
+        <div className="mb-2 flex flex-wrap gap-1.5">
+          {[{ label: "All" } as { label: string }, ...present].map((f) => {
+            const isActive = f.label === "All" ? !active : active?.label === f.label;
+            return (
+              <button
+                key={f.label}
+                type="button"
+                onClick={() => setFilter(f.label === "All" ? null : f.label)}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
+                  isActive
+                    ? "bg-amber-400 text-black"
+                    : "border border-white/15 text-white/65 hover:border-white/35 hover:text-white"
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+
       <div className="grid max-h-[58vh] grid-cols-1 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-        {state.spin.candidates.map((player) => (
+        {shown.map((player) => (
           <PlayerCard
             key={player.id}
             config={config}

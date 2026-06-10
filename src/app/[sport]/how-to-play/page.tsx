@@ -44,7 +44,7 @@ export default async function HowToPlay({ params }: { params: Promise<{ sport: s
   const rules = [
     `Each round, a slot machine gives you a random franchise and decade.`,
     `Pick one player from that team and era, and slot him at a position he actually played.`,
-    `You get ${c.skips.team} team reroll and ${c.skips.era} era reroll, use them wisely.`,
+    `You get ${c.rerolls} rerolls, each swaps the current spin for a fresh team and era, so use them wisely.`,
     `Fill all ${c.positions.length} roster spots across different eras.`,
     `Your lineup's stats are run through a season sim. Every category has a floor, one glaring weakness caps your record no matter how stacked the rest is.`,
     `Clear every floor with an elite, balanced roster and you go ${c.brand}.`,

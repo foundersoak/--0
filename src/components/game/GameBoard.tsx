@@ -77,8 +77,7 @@ export function GameBoard({
               config={config}
               state={state}
               onSpin={() => dispatch({ type: "SPIN" })}
-              onSkipTeam={() => dispatch({ type: "SKIP_TEAM" })}
-              onSkipEra={() => dispatch({ type: "SKIP_ERA" })}
+              onReroll={() => dispatch({ type: "REROLL" })}
             />
             {mode.liveMeters ? <LiveMeters engine={engine} state={state} accent={accent} /> : null}
             <CandidateList

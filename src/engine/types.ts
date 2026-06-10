@@ -119,7 +119,8 @@ export interface SportConfig {
   blurb?: string; // 1-2 sentence how-it-works
   seasonGames: number; // 82, 17, 162, 38, 12
   positions: PositionSlot[]; // ordered; length === rounds
-  skips: { team: number; era: number };
+  /** How many times you can reroll a spin (a fresh team + era) per game. */
+  rerolls: number;
   /** When true, each round draws a distinct decade (era diversity). */
   requireEraDiversity: boolean;
   eras: EraDef[];
@@ -127,6 +128,12 @@ export interface SportConfig {
   stats: StatDef[]; // stats shown on player cards
   eraAdjustment: EraAdjustment;
   scoring: ScoringConfig;
+  /**
+   * Optional quick filters for the candidate picker, for sports whose spins can
+   * surface many players at once (e.g. MLB hitters vs pitchers). The toggle is
+   * only shown when a spin's candidates span more than one of these groups.
+   */
+  candidateFilters?: { label: string; positions: PosId[] }[];
   theme: { primary: string; accent: string; bg?: string };
 }
 

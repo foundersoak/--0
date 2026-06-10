@@ -70,12 +70,17 @@ export function PlayerCard({
             {teamName(config, player.team, player.era)}
           </div>
         </div>
-        <span
-          className="shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-bold text-black"
-          style={{ backgroundColor: secondary }}
-        >
-          {eraLabel(config, player.era)}
-        </span>
+        <div className="flex shrink-0 items-center gap-1">
+          <span className="rounded-md border border-white/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white/80">
+            {player.positions[0]}
+          </span>
+          <span
+            className="rounded-md px-1.5 py-0.5 text-[10px] font-bold text-black"
+            style={{ backgroundColor: secondary }}
+          >
+            {eraLabel(config, player.era)}
+          </span>
+        </div>
       </div>
       <StatLine config={config} player={player} className="mt-2" hideStats={hideStats} />
       {player.notable ? (

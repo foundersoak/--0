@@ -9,14 +9,12 @@ export function SlotMachine({
   config,
   state,
   onSpin,
-  onSkipTeam,
-  onSkipEra,
+  onReroll,
 }: {
   config: SportConfig;
   state: GameState;
   onSpin: () => void;
-  onSkipTeam: () => void;
-  onSkipEra: () => void;
+  onReroll: () => void;
 }) {
   const rounds = roundsOf(config);
   const roundLabel = `Round ${Math.min(state.round + 1, rounds)} of ${rounds}`;
@@ -60,8 +58,7 @@ export function SlotMachine({
           spinKey={state.draws}
         />
         <div className="flex gap-2">
-          <SkipButton label="Reroll Team" count={state.teamSkipsLeft} onClick={onSkipTeam} />
-          <SkipButton label="Reroll Era" count={state.eraSkipsLeft} onClick={onSkipEra} />
+          <SkipButton label="Reroll" count={state.rerollsLeft} onClick={onReroll} />
         </div>
         <p className="text-sm text-white/50">Pick a player below ↓</p>
       </div>
@@ -178,7 +175,7 @@ function SkipButton({
 function SkipsHint({ state }: { state: GameState }) {
   return (
     <div className="text-[11px] text-white/35">
-      Rerolls left, Team {state.teamSkipsLeft} · Era {state.eraSkipsLeft}
+      {state.rerollsLeft} {state.rerollsLeft === 1 ? "reroll" : "rerolls"} left
     </div>
   );
 }
