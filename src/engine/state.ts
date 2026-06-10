@@ -37,6 +37,10 @@ export type GameAction =
 const SEP = "::";
 export const keyOf = (team: TeamId, era: EraId): string => `${team}${SEP}${era}`;
 
+/** A spin prefers (team, era) pools offering at least this many eligible
+ *  candidates, falling back to thinner pools only when nothing richer fits. */
+const MIN_RICH_CANDIDATES = 4;
+
 export interface DataIndex {
   byKey: Map<string, PlayerEntry[]>;
   pairs: { team: TeamId; era: EraId; key: string }[];
@@ -118,6 +122,14 @@ function drawSpin(
   if (opts.sameEra) narrow((pr) => pr.era === opts.sameEra);
   if (opts.excludeEra) narrow((pr) => pr.era !== opts.excludeEra);
   if (opts.excludeTeam) narrow((pr) => pr.team !== opts.excludeTeam);
+
+  // Prefer pools that actually offer a choice: bias toward (team, era) buckets
+  // with several players still eligible for an open slot, so a spin rarely
+  // surfaces just one or two names. Applied last and only when it leaves an
+  // option, so a thin-but-required era still works as a graceful fallback.
+  const eligibleCount = (key: string): number =>
+    index.byKey.get(key)!.filter((p) => eligibleForAnyOpen(p, open)).length;
+  narrow((pr) => eligibleCount(pr.key) >= MIN_RICH_CANDIDATES);
 
   // Ultimate fallback: any usable pair (ignores diversity/exclusions).
   if (pairs.length === 0) pairs = index.pairs.filter((pr) => usable(pr.key));
