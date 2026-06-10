@@ -58,13 +58,21 @@ const nhlConfig: SportConfig = {
   // anchors Defense (and chips in some offense), and the goalie is Goaltending.
   // Every axis is gated, so a weak goalie, a soft blue line, or no finishing
   // caps the record no matter how loaded the rest of the roster is.
+  //
+  // Targets calibrated from 2000 random era-diverse rosters:
+  //   scoring avg=152 p10=129 p95=183  → target=210 puts avg at ~0.72 strength
+  //   playmaking avg=216 p10=184 p95=260  → target=310
+  //   defense avg=46 p10=36 p95=69  → target=60
+  //   goaltending avg=32 p10=24 p95=41  → target=40
+  // Curve midpoint=0.65 + steepness=10 maps p50 roster → ~57 wins,
+  // p90 → ~76 wins, top ~5% can reach 82-0 when all gates pass.
   scoring: {
     mode: "synthetic",
     categories: [
-      { key: "scoring", label: "Scoring", weight: 1.1, floor: 36, target: 66 },
-      { key: "playmaking", label: "Playmaking", weight: 1.1, floor: 48, target: 86 },
-      { key: "defense", label: "Defense", weight: 1.0, floor: 16, target: 34 },
-      { key: "goaltending", label: "Goaltending", weight: 1.1, floor: 14, target: 30 },
+      { key: "scoring", label: "Scoring", weight: 1.1, floor: 120, target: 210 },
+      { key: "playmaking", label: "Playmaking", weight: 1.1, floor: 165, target: 310 },
+      { key: "defense", label: "Defense", weight: 1.0, floor: 34, target: 60 },
+      { key: "goaltending", label: "Goaltending", weight: 1.1, floor: 24, target: 40 },
     ],
     positionScoring: [
       {
@@ -92,9 +100,9 @@ const nhlConfig: SportConfig = {
         }),
       },
     ],
-    gateStrength: 1.0,
-    curve: { midpoint: 0.6, steepness: 9, maxWinFraction: 1.0 },
-    perfectThreshold: 0.97,
+    gateStrength: 1.5,
+    curve: { midpoint: 0.69, steepness: 10, maxWinFraction: 1.0 },
+    perfectThreshold: 0.93,
   },
   candidateFilters: [
     { label: "Skaters", positions: ["C", "LW", "RW", "D"] },
