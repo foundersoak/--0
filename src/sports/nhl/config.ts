@@ -59,20 +59,19 @@ const nhlConfig: SportConfig = {
   // Every axis is gated, so a weak goalie, a soft blue line, or no finishing
   // caps the record no matter how loaded the rest of the roster is.
   //
-  // Targets calibrated from 2000 random era-diverse rosters:
-  //   scoring avg=152 p10=129 p95=183  → target=210 puts avg at ~0.72 strength
-  //   playmaking avg=216 p10=184 p95=260  → target=310
-  //   defense avg=46 p10=36 p95=69  → target=60
-  //   goaltending avg=32 p10=24 p95=41  → target=40
-  // Curve midpoint=0.65 + steepness=10 maps p50 roster → ~57 wins,
-  // p90 → ~76 wins, top ~5% can reach 82-0 when all gates pass.
+  // Tuned against the full 320-player pool (random era-diverse rosters land at
+  // ~0.55 win fraction, matching the other sports). Floors sit a notch below
+  // each axis's p10 so a balanced roster clears them but a lopsided one (all
+  // offense / soft blue line / weak goalie) still gets capped; a skilled,
+  // best-first roster has a real path to 82-0. Random-roster outcome: avg ~48
+  // wins, ~20% gated, perfect rare but reachable.
   scoring: {
     mode: "synthetic",
     categories: [
-      { key: "scoring", label: "Scoring", weight: 1.1, floor: 120, target: 210 },
-      { key: "playmaking", label: "Playmaking", weight: 1.1, floor: 165, target: 310 },
-      { key: "defense", label: "Defense", weight: 1.0, floor: 34, target: 60 },
-      { key: "goaltending", label: "Goaltending", weight: 1.1, floor: 24, target: 40 },
+      { key: "scoring", label: "Scoring", weight: 1.1, floor: 112, target: 210 },
+      { key: "playmaking", label: "Playmaking", weight: 1.1, floor: 155, target: 310 },
+      { key: "defense", label: "Defense", weight: 1.0, floor: 31, target: 60 },
+      { key: "goaltending", label: "Goaltending", weight: 1.1, floor: 22, target: 40 },
     ],
     positionScoring: [
       {

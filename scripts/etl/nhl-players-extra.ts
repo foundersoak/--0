@@ -63,7 +63,6 @@ export const NHL_PLAYERS_EXTRA: NhlPlayer[] = [
   { name: "Roope Hintz", team: "stars", era: "2020s", pos: "C", stats: { g: 37, a: 38, p: 75, pm: 24 }, rating: 84, notable: "Top-line center" },
   { name: "Miro Heiskanen", team: "stars", era: "2020s", pos: "D", stats: { g: 11, a: 62, p: 73, pm: 22 }, rating: 87, notable: "No. 1 minutes-eating D" },
   { name: "Wyatt Johnston", team: "stars", era: "2020s", pos: "C", stats: { g: 32, a: 33, p: 65, pm: 18 }, rating: 81, notable: "Young top-six scorer" },
-  { name: "Tyler Seguin", team: "stars", era: "2020s", pos: "C", stats: { g: 27, a: 30, p: 57, pm: 10 }, rating: 82, notable: "Veteran scoring center" },
 
   // --- Winnipeg Jets (Hellebuyck G exists) ---
   { name: "Kyle Connor", team: "jets", era: "2020s", pos: "LW", stats: { g: 47, a: 46, p: 93, pm: 20 }, rating: 86, notable: "Elite goal-scoring winger" },
@@ -120,18 +119,10 @@ export const NHL_PLAYERS_EXTRA: NhlPlayer[] = [
   { name: "Juuse Saros", team: "predators", era: "2020s", pos: "G", stats: { w: 36, svp: 0.919, gaa: 2.59, so: 5 }, rating: 85, notable: "Vezina-finalist workhorse" },
   { name: "Ryan O'Reilly", team: "predators", era: "2020s", pos: "C", stats: { g: 26, a: 43, p: 69, pm: 12 }, rating: 81, notable: "Selke/Conn Smythe veteran C" },
 
-  // --- Calgary Flames (Gaudreau was 2010s) ---
-  { name: "Elias Lindholm", team: "flames", era: "2020s", pos: "C", stats: { g: 42, a: 40, p: 82, pm: 30 }, rating: 84, notable: "42-goal two-way C" },
-  { name: "Nazem Kadri", team: "flames", era: "2020s", pos: "C", stats: { g: 29, a: 46, p: 75, pm: 10 }, rating: 81, notable: "Veteran scoring center" },
-
   // --- Buffalo Sabres ---
   { name: "Tage Thompson", team: "sabres", era: "2020s", pos: "C", stats: { g: 47, a: 47, p: 94, pm: 8 }, rating: 85, notable: "47-goal power center" },
   { name: "Rasmus Dahlin", team: "sabres", era: "2020s", pos: "D", stats: { g: 20, a: 53, p: 73, pm: 5 }, rating: 85, notable: "No. 1 offensive D" },
   { name: "Alex Tuch", team: "sabres", era: "2020s", pos: "RW", stats: { g: 36, a: 43, p: 79, pm: 8 }, rating: 82, notable: "Power-forward scorer" },
-
-  // --- Los Angeles Kings (Kopitar/Doughty 2010s) ---
-  { name: "Adrian Kempe", team: "kings", era: "2020s", pos: "RW", stats: { g: 35, a: 32, p: 67, pm: 16 }, rating: 82, notable: "Top-line scoring winger" },
-  { name: "Anze Kopitar", team: "kings", era: "2020s", pos: "C", stats: { g: 28, a: 42, p: 70, pm: 18 }, rating: 84, notable: "Captain, two-way C" },
 
   // --- Montreal Canadiens ---
   { name: "Nick Suzuki", team: "canadiens", era: "2020s", pos: "C", stats: { g: 30, a: 59, p: 89, pm: 12 }, rating: 84, notable: "Captain, No. 1 center" },
@@ -207,20 +198,16 @@ export const NHL_PLAYERS_EXTRA: NhlPlayer[] = [
 
   // --- Montreal Canadiens (Subban/Price exist) ---
   { name: "Max Pacioretty", team: "canadiens", era: "2010s", pos: "LW", stats: { g: 39, a: 28, p: 67, pm: 18 }, rating: 82, notable: "Captain, 5x 30-goal scorer" },
-  { name: "Brendan Gallagher", team: "canadiens", era: "2010s", pos: "RW", stats: { g: 31, a: 21, p: 52, pm: 10 }, rating: 79, notable: "Net-front spark plug" },
 
   // --- Minnesota Wild ---
   { name: "Zach Parise", team: "wild", era: "2010s", pos: "LW", stats: { g: 33, a: 29, p: 62, pm: 14 }, rating: 82, notable: "Top-line power forward" },
-  { name: "Mikael Granlund", team: "wild", era: "2010s", pos: "C", stats: { g: 26, a: 41, p: 67, pm: 16 }, rating: 80, notable: "Top-six playmaker" },
   { name: "Ryan Suter", team: "wild", era: "2010s", pos: "D", stats: { g: 8, a: 43, p: 51, pm: 18 }, rating: 83, notable: "Minutes-eating No. 1 D" },
 
   // --- Calgary Flames (Gaudreau exists) ---
-  { name: "Sean Monahan", team: "flames", era: "2010s", pos: "C", stats: { g: 34, a: 28, p: 62, pm: 12 }, rating: 81, notable: "No. 1 center" },
   { name: "Mark Giordano", team: "flames", era: "2010s", pos: "D", stats: { g: 17, a: 57, p: 74, pm: 39 }, rating: 84, notable: "Norris-winning captain" },
 
   // --- Ottawa Senators (Karlsson exists) ---
   { name: "Mark Stone", team: "senators", era: "2010s", pos: "RW", stats: { g: 28, a: 36, p: 64, pm: 21 }, rating: 83, notable: "Elite two-way winger" },
-  { name: "Kyle Turris", team: "senators", era: "2010s", pos: "C", stats: { g: 27, a: 37, p: 64, pm: 10 }, rating: 79, notable: "No. 1 center" },
 
   // --- Buffalo Sabres ---
   { name: "Jack Eichel", team: "sabres", era: "2010s", pos: "C", stats: { g: 28, a: 54, p: 82, pm: 2 }, rating: 85, notable: "Franchise No. 1 center" },
@@ -228,7 +215,6 @@ export const NHL_PLAYERS_EXTRA: NhlPlayer[] = [
 
   // --- New York Rangers (Lundqvist is 2000s) ---
   { name: "Henrik Lundqvist", team: "rangers", era: "2010s", pos: "G", stats: { w: 39, svp: 0.930, gaa: 2.05, so: 8 }, rating: 88, notable: "Vezina winner, King Henrik" },
-  { name: "Ryan McDonagh", team: "rangers", era: "2010s", pos: "D", stats: { g: 9, a: 34, p: 43, pm: 25 }, rating: 82, notable: "No. 1 D, captain" },
 
   // --- Winnipeg Jets (Wheeler exists) ---
   { name: "Patrik Laine", team: "jets", era: "2010s", pos: "RW", stats: { g: 44, a: 26, p: 70, pm: 8 }, rating: 83, notable: "44-goal sniper" },
@@ -237,23 +223,11 @@ export const NHL_PLAYERS_EXTRA: NhlPlayer[] = [
   // --- Edmonton Oilers (McDavid exists) ---
   { name: "Leon Draisaitl", team: "oilers", era: "2010s", pos: "C", stats: { g: 50, a: 55, p: 105, pm: 3 }, rating: 89, notable: "Art Ross & Hart MVP" },
 
-  // --- Colorado Avalanche (MacKinnon/Landeskog exist) ---
-  { name: "Cale Makar", team: "avalanche", era: "2010s", pos: "D", stats: { g: 12, a: 38, p: 50, pm: 12 }, rating: 84, notable: "Calder winner, offensive D" },
-
   // =========================================================================
-  // 2000s — a few fills where contender buckets are thin.
+  // 2000s — a couple of contender fills (the 2010s/2020s gap is the priority).
   // =========================================================================
 
-  // --- Detroit Red Wings (Datsyuk/Lidstrom exist) — early-2000s Cup core ---
+  // --- Detroit Red Wings (Datsyuk/Lidstrom exist) — Cup-era core ---
   { name: "Henrik Zetterberg", team: "redwings", era: "2000s", pos: "C", stats: { g: 33, a: 39, p: 72, pm: 22 }, rating: 85, notable: "Conn Smythe, 2008 Cup" },
   { name: "Brendan Shanahan", team: "redwings", era: "2000s", pos: "LW", stats: { g: 37, a: 38, p: 75, pm: 20 }, rating: 84, notable: "Power forward, 2002 Cup" },
-  { name: "Chris Osgood", team: "redwings", era: "2000s", pos: "G", stats: { w: 39, svp: 0.914, gaa: 2.09, so: 6 }, rating: 80, notable: "2008 Cup-winning goalie" },
-
-  // --- New Jersey Devils (Brodeur exists) ---
-  { name: "Scott Stevens", team: "devils", era: "2000s", pos: "D", stats: { g: 9, a: 36, p: 45, pm: 30 }, rating: 85, notable: "Conn Smythe, 2x Cup captain" },
-  { name: "Patrik Elias", team: "devils", era: "2000s", pos: "LW", stats: { g: 35, a: 45, p: 80, pm: 25 }, rating: 84, notable: "Franchise scoring leader, 2x Cup" },
-
-  // --- Anaheim Ducks (Selanne/Niedermayer exist) ---
-  { name: "Ryan Getzlaf", team: "ducks", era: "2000s", pos: "C", stats: { g: 25, a: 66, p: 91, pm: 23 }, rating: 85, notable: "2007 Cup, elite playmaker" },
-  { name: "Jean-Sebastien Giguere", team: "ducks", era: "2000s", pos: "G", stats: { w: 36, svp: 0.922, gaa: 2.30, so: 4 }, rating: 81, notable: "Conn Smythe, 2007 Cup" },
 ];

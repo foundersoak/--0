@@ -15,6 +15,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "csv-parse/sync";
 import { NFL_LEGENDS, type LegendEntry } from "./nfl-legends";
+import { NFL_LEGENDS_EXTRA } from "./nfl-legends-extra";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const CACHE = join(ROOT, "scripts", "etl", ".cache");
@@ -200,15 +201,25 @@ async function main() {
   }
   console.log("  modern players (post-filter):", modern.length);
 
-  // --- Merge curated legends ---
-  const legends: Out[] = (NFL_LEGENDS as LegendEntry[]).map((l) => ({
+  // --- Merge curated legends (base set + the pre-2000 depth pack) ---
+  const legends: Out[] = ([...NFL_LEGENDS, ...NFL_LEGENDS_EXTRA] as LegendEntry[]).map((l) => ({
     id: "", name: l.name, team: l.team, era: l.era, role: l.pos, positions: [l.pos], stats: l.stats, rating: l.rating ?? 50,
   }));
   console.log("  curated legends:", legends.length);
 
+  // Dedup by identity (name, team, era), keeping the highest-rated copy — so an
+  // overlap between the base and extra legend sets (or a curated name that also
+  // exists in nflverse) collapses to one entry instead of a duplicate card.
+  const byIdentity = new Map<string, Out>();
+  for (const o of [...modern, ...legends]) {
+    const idk = `${o.name.toLowerCase().trim()}|${o.team}|${o.era}`;
+    const prev = byIdentity.get(idk);
+    if (!prev || o.rating > prev.rating) byIdentity.set(idk, o);
+  }
+
   // --- Top-N per (team, era, role) ---
   const byBucket = new Map<string, Out[]>();
-  for (const o of [...modern, ...legends]) {
+  for (const o of byIdentity.values()) {
     const bk = `${o.team}|${o.era}|${o.role}`;
     (byBucket.get(bk) ?? byBucket.set(bk, []).get(bk)!).push(o);
   }

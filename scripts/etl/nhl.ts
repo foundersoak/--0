@@ -10,6 +10,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { NHL_PLAYERS, type NhlPlayer } from "./nhl-players";
+import { NHL_PLAYERS_EXTRA } from "./nhl-players-extra";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const OUT = join(ROOT, "src", "sports", "nhl", "data.json");
@@ -59,11 +60,16 @@ const slugify = (s: string): string =>
 function main() {
   const players: { id: string; name: string; team: string; era: string; positions: string[]; stats: Record<string, number>; notable?: string }[] = [];
   const usedIds = new Set<string>();
+  const seenIdentity = new Set<string>();
   const issues: string[] = [];
-  for (const p of NHL_PLAYERS as NhlPlayer[]) {
+  for (const p of [...NHL_PLAYERS, ...NHL_PLAYERS_EXTRA] as NhlPlayer[]) {
     if (!FRANCH[p.team]) { issues.push(`bad team: ${p.name} -> ${p.team}`); continue; }
     if (!ALLOWED_ERA.has(p.era)) { issues.push(`bad era: ${p.name} -> ${p.era}`); continue; }
     if (!POS.has(p.pos)) { issues.push(`bad pos: ${p.name} -> ${p.pos}`); continue; }
+    // Collapse an overlap between the base and extra sets to one card.
+    const idk = `${p.name.toLowerCase().trim()}|${p.team}|${p.era}`;
+    if (seenIdentity.has(idk)) continue;
+    seenIdentity.add(idk);
     let id = `${slugify(p.name)}-${p.team}-${p.era}`;
     let i = 2;
     while (usedIds.has(id)) id = `${slugify(p.name)}-${p.team}-${p.era}-${i++}`;
