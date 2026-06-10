@@ -4,7 +4,7 @@ export const BRAND = {
   short: "Flawless Lineup",
   tagline: "Draft an all-time roster. Go undefeated. Or don't.",
   description:
-    "Spin a random franchise and era, draft legends into your lineup, and find out if your all-time team can run the table, across every major sport.",
+    "Free all-time roster games for the NBA, NFL, MLB, NHL, and more. Spin a random franchise and era, draft legends, and see if your all-time team can go undefeated.",
   // Canonical site URL, drives metadata, sitemap, robots, and OG image URLs.
   // When you point a custom domain at the site, just set NEXT_PUBLIC_SITE_URL in
   // Vercel (no code change). Trailing slashes are trimmed so URLs never double up.
