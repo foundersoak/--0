@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND } from "@/lib/brand";
 import { SPORT_CATALOG } from "@/sports/registry";
+
+export const metadata: Metadata = {
+  title: "All-Time Roster Games: Go 82-0, 162-0 & Undefeated",
+  description:
+    "Build an all-time roster and chase a perfect, undefeated season. Go 82-0 in the NBA, 162-0 in MLB, 17-0 in the NFL, plus NHL, college football, and the Premier League. Free, no signup.",
+  alternates: { canonical: "/" },
+};
 
 export default function HubPage() {
   return (

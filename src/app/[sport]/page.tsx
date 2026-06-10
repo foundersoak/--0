@@ -22,12 +22,13 @@ export async function generateMetadata({
   const mod = getSport(sport);
   if (!mod) return {};
   const c = mod.config;
-  const title = `${c.brand}, ${c.name} Roster Game`;
+  const title = `${c.brand}: ${c.name} All-Time Roster Game`;
+  const description = `Build an all-time ${c.name} roster and chase a perfect ${c.brand} season. ${c.tagline} Free, no signup.`;
   return {
     title,
-    description: c.tagline,
+    description,
     alternates: { canonical: `/${sport}` },
-    openGraph: { title, description: c.tagline },
+    openGraph: { title, description },
   };
 }
 
