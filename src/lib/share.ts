@@ -42,8 +42,6 @@ export interface ShareCard {
   grade: string;
   perfect: boolean;
   passes: boolean[];
-  roster: { slot: string; player: string }[];
-  seed: string;
 }
 
 function b64urlEncode(json: string): string {
@@ -69,8 +67,6 @@ export function encodeCard(card: ShareCard): string {
     g: card.grade,
     p: card.perfect ? 1 : 0,
     c: card.passes.map((x) => (x ? 1 : 0)).join(""),
-    r: card.roster.map((x) => [x.slot, x.player]),
-    e: card.seed,
   };
   return b64urlEncode(JSON.stringify(compact));
 }
@@ -90,10 +86,6 @@ export function decodeCard(code: string): ShareCard | null {
       passes: String(c.c ?? "")
         .split("")
         .map((x) => x === "1"),
-      roster: Array.isArray(c.r)
-        ? c.r.map((x: [string, string]) => ({ slot: x[0], player: x[1] }))
-        : [],
-      seed: c.e ?? "",
     };
   } catch {
     return null;

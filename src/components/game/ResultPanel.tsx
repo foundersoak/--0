@@ -95,11 +95,6 @@ export function ResultPanel({
       grade: result.grade,
       perfect: result.perfect,
       passes: result.categories.map((c) => c.passed),
-      roster: config.positions.map((slot) => ({
-        slot: slot.abbr,
-        player: state.filled.find((f) => f.slotId === slot.id)?.player.name ?? "",
-      })),
-      seed: state.seed,
     };
     const url =
       typeof window !== "undefined"

@@ -20,7 +20,6 @@ export default async function Image({ params }: { params: Promise<{ code: string
   const name = card?.name ?? "";
   const perfect = card?.perfect ?? false;
   const passes = card?.passes ?? [];
-  const roster = card?.roster ?? [];
 
   return new ImageResponse(
     (
@@ -102,23 +101,7 @@ export default async function Image({ params }: { params: Promise<{ code: string
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {roster.map((r) => (
-            <div
-              key={r.slot}
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 200 }}
-            >
-              <div style={{ display: "flex", fontSize: 22, fontWeight: 800, color: GOLD }}>
-                {r.slot}
-              </div>
-              <div style={{ display: "flex", fontSize: 24, color: "white", marginTop: 6, textAlign: "center" }}>
-                {r.player}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: "flex", justifyContent: "center", fontSize: 26, color: "rgba(255,255,255,0.5)" }}>
+        <div style={{ display: "flex", justifyContent: "center", fontSize: 30, color: "rgba(255,255,255,0.55)" }}>
           {`${BRAND.url.replace(/^https?:\/\//, "")}, can you go ${brand}?`}
         </div>
       </div>
