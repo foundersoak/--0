@@ -1,4 +1,5 @@
 import type { PlayerDataset, SportConfig, SportId } from "@/engine/types";
+import mlbConfig from "./mlb/config";
 import nbaConfig from "./nba/config";
 
 export interface SportModule {
@@ -12,6 +13,10 @@ export const SPORTS: Partial<Record<SportId, SportModule>> = {
   nba: {
     config: nbaConfig,
     load: () => import("./nba/data.json").then((m) => m.default as unknown as PlayerDataset),
+  },
+  mlb: {
+    config: mlbConfig,
+    load: () => import("./mlb/data.json").then((m) => m.default as unknown as PlayerDataset),
   },
 };
 

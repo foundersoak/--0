@@ -14,7 +14,9 @@ export function StatLine({
 }) {
   return (
     <div className={`flex flex-wrap gap-x-3 gap-y-1 ${className}`}>
-      {config.stats.map((s) => (
+      {config.stats
+        .filter((s) => s.key in player.stats)
+        .map((s) => (
         <div key={s.key} className="flex items-baseline gap-1 tabular-nums">
           <span className="text-sm font-semibold text-white">
             {hideStats ? "-" : fmtStat(player.stats[s.key] ?? 0, s.decimals ?? 1)}
