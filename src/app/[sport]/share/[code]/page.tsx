@@ -54,17 +54,6 @@ export default async function SharePage({ params }: { params: Params }) {
           />
         ))}
       </div>
-      <ul className="mx-auto grid max-w-sm gap-1 text-left">
-        {card.roster.map((r) => (
-          <li
-            key={r.slot}
-            className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
-          >
-            <span className="w-8 text-xs font-bold text-white/40">{r.slot}</span>
-            <span className="font-semibold text-white">{r.player}</span>
-          </li>
-        ))}
-      </ul>
       <Link
         href={`/${sport}`}
         className="inline-block rounded-xl bg-amber-400 px-6 py-3 font-bold text-black transition hover:bg-amber-300"
